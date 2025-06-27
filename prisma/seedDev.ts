@@ -1,4 +1,4 @@
-import {PrismaClient, UnitProduct, UnitDish, PackagingProduct} from '@prisma/client'
+import {PrismaClient, UnitProduct, UnitRecipe, PackagingProduct} from '@prisma/client'
 import {hashPassword} from '@serverUtils'
 
 export const seedDev = async (prisma: PrismaClient) => {
@@ -141,22 +141,22 @@ export const seedDev = async (prisma: PrismaClient) => {
     })
 
     //Seed DISH
-    const dish = await prisma.dish.create({
+    const recipe = await prisma.recipe.create({
         data: {
             name: 'Pasta met saus',
             instructions: 'Kook spaghetti en voeg saus toe.',
             groupId: group1.id,
-            productDishes: {
+            ingredients: {
                 create: [
                     {
                         productId: createdProducts[1].id,
                         amount: 200,
-                        unitDish: UnitDish.G,
+                        unitRecipe: UnitRecipe.G,
                     },
                     {
                         productId: createdProducts[2].id,
                         amount: 100,
-                        unitDish: UnitDish.G,
+                        unitRecipe: UnitRecipe.G,
                     }
                 ]
             }
