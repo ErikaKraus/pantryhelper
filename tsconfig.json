@@ -21,7 +21,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@context": ["./src/context/"],
-      "@models": ["./src/models/"],
+      "@models": ["./src/lib/models/"],
       "@hooks": ["./src/lib/hooks/"],
       "@schemas": ["./src/lib/schemas/"],
       "@actions": ["./src/lib/server/actions/"],
