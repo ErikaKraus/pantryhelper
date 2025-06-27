@@ -1,0 +1,196 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum PackagingProduct {
+  BRIK
+  BLIK
+  DOOS
+  FLES
+  ZAK
+  POTJE
+  VLOOTJE
+}
+
+enum UnitProduct {
+  ML
+  CL
+  DL
+  L
+  MG
+  G
+  KG
+}
+
+enum UnitDish {
+  ML
+  CL
+  DL
+  L
+  MG
+  G
+  KG
+  CUP
+  TBSP
+  TSP
+}
+
+model User {
+  id                   String                 @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                String                 @unique @db.VarChar(255)
+  password             String
+  firstName            String
+  lastName             String
+  sessions             Session[]
+  role                 Role
+  UserGroup            UserGroup[]
+  UserFavouriteProduct UserFavouriteProduct[]
+  UserFavouriteDish    UserFavouriteDish[]
+}
+
+model Group {
+  id            String         @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String
+  inviteCode    String         @unique
+  createdAt     DateTime?      @default(now())
+  users         UserGroup[]
+  products      Product[]
+  dishes        Dish[]
+  categories    Category[]
+  shoppinglists Shoppinglist[]
+}
+
+model UserGroup {
+  id      String @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId  String @db.Uuid
+  user    User   @relation(fields: [userId], references: [id])
+  groupId String @db.Uuid
+  group   Group  @relation(fields: [groupId], references: [id])
+  role    Role
+
+  @@unique([userId, groupId])
+}
+
+model Product {
+  id                    String                 @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                  String
+  brand                 String
+  numberOfItems         Int
+  volumeContent         Int?
+  packaging             PackagingProduct?
+  unitProduct           UnitProduct?
+  purchaseDate          DateTime?
+  expiryDate            DateTime?
+  needsRestock          Boolean?
+  categories            Category[]
+  shoppinglistProducts  ShoppinglistProduct[]
+  productDishes         ProductDish[]
+  productEntries        ProductEntry[]
+  userFavouriteProducts UserFavouriteProduct[]
+  group                 Group?                 @relation(fields: [groupId], references: [id])
+  groupId               String?                @db.Uuid
+}
+
+model Category {
+  id       String    @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name     String
+  products Product[]
+  group    Group?    @relation(fields: [groupId], references: [id])
+  groupId  String?   @db.Uuid
+}
+
+model Shoppinglist {
+  id                   String                @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                 String
+  shoppinglistProducts ShoppinglistProduct[]
+  group                Group?                @relation(fields: [groupId], references: [id])
+  groupId              String?               @db.Uuid
+}
+
+model ShoppinglistProduct {
+  shoppinglist   Shoppinglist @relation(fields: [shoppinglistId], references: [id], onDelete: Cascade)
+  shoppinglistId String       @db.Uuid
+  product        Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId      String       @db.Uuid
+  quantity       Int          @default(1)
+
+  @@id([shoppinglistId, productId])
+}
+
+model Dish {
+  id                  String              @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                String
+  instructions        String
+  productDishes       ProductDish[]
+  userFavouriteDishes UserFavouriteDish[]
+  group               Group?              @relation(fields: [groupId], references: [id])
+  groupId             String?             @db.Uuid
+}
+
+model ProductDish {
+  id        String   @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  amount    Int
+  unitDish  UnitDish
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String   @db.Uuid
+  dish      Dish     @relation(fields: [dishId], references: [id], onDelete: Cascade)
+  dishId    String   @db.Uuid
+
+  @@unique([productId, dishId])
+}
+
+model ProductEntry {
+  id           String       @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  purchaseDate DateTime?    @default(now())
+  expiryDate   DateTime?
+  quantity     Int          @default(1)
+  product      Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId    String       @db.Uuid
+  unitProduct  UnitProduct?
+
+  @@index([productId])
+}
+
+model UserFavouriteProduct {
+  id        String  @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String  @db.Uuid
+  user      User    @relation(fields: [userId], references: [id])
+  productId String  @db.Uuid
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@unique([userId, productId])
+}
+
+model UserFavouriteDish {
+  id     String @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+  dishId String @db.Uuid
+  dish   Dish   @relation(fields: [dishId], references: [id])
+
+  @@unique([userId, dishId])
+}
+
+model Session {
+  id          String   @id @unique @db.VarChar()
+  activeFrom  DateTime @default(now())
+  activeUntil DateTime @default(dbgenerated("CURRENT_TIMESTAMP + interval '1 day'"))
+  userId      String   @db.Uuid
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
