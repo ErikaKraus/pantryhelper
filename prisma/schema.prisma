@@ -59,9 +59,10 @@ model User {
   lastName              String
   sessions              Session[]
   role                  Role
-  UserGroup             UserGroup[]
   userFavouriteProducts UserFavouriteProduct[]
   userFavouriteRecipes  UserFavouriteRecipe[]
+  groupId               String                 @db.Uuid
+  group                 Group                  @relation(fields: [groupId], references: [id])
 }
 
 model Group {
@@ -69,22 +70,11 @@ model Group {
   name          String
   inviteCode    String         @unique
   createdAt     DateTime?      @default(now())
-  users         UserGroup[]
   products      Product[]
   recipes       Recipe[]
   categories    Category[]
   shoppinglists Shoppinglist[]
-}
-
-model UserGroup {
-  id      String @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId  String @db.Uuid
-  user    User   @relation(fields: [userId], references: [id])
-  groupId String @db.Uuid
-  group   Group  @relation(fields: [groupId], references: [id])
-  role    Role
-
-  @@unique([userId, groupId])
+  users         User[]
 }
 
 model Product {
@@ -103,16 +93,16 @@ model Product {
   ingredients           Ingredient[]
   productEntries        ProductEntry[]
   userFavouriteProducts UserFavouriteProduct[]
-  group                 Group?                 @relation(fields: [groupId], references: [id])
-  groupId               String?                @db.Uuid
+  group                 Group                  @relation(fields: [groupId], references: [id])
+  groupId               String                 @db.Uuid
 }
 
 model Category {
   id       String    @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name     String
   products Product[]
-  group    Group?    @relation(fields: [groupId], references: [id])
-  groupId  String?   @db.Uuid
+  group    Group     @relation(fields: [groupId], references: [id])
+  groupId  String    @db.Uuid
 }
 
 model Shoppinglist {

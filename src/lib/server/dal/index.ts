@@ -1,5 +1,5 @@
 import * as users from './users'
-// import * as products from './products'
+import * as products from './products'
 // import * as dishes from './dishes'
 // import * as shoppingLists from './shoppinglists'
 // import * as shoppingListProducts from './shoppinglistProducts'
@@ -13,7 +13,7 @@ import * as users from './users'
  * Let op, hiervoor moet de '@dallll' alias wel correct geconfigureerd zijn in tsconfig.json.
  */
 export * from './users'
-// export * from './products'
+export * from './products'
 // export * from './dishes'
 // export * from './shoppinglists'
 // export * from './shoppinglistProducts'
@@ -27,7 +27,7 @@ export * from './users'
  */
 const DAL = {
   ...users,
-  // ...products,
+  ...products,
   // ...dishes,
   // ...shoppingLists,
   // ...shoppingListProducts,
