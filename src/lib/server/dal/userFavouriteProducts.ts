@@ -55,7 +55,7 @@ export async function getAllUserFavouriteProducts(userId: string): Promise<UserF
  * Haal één specifieke favorite entry op (of null als die niet bestaat).
  * Handig om te checken of een product al favoriet is.
  */
-export async function getProductById(userId: string, productId: string): Promise<UserFavouriteProduct | null> {
+export async function getUserFavouriteProductById(userId: string, productId: string): Promise<UserFavouriteProduct | null> {
     return prismaClient.userFavouriteProduct.findUnique({
         where: {
             userId_productId: {

@@ -1,9 +1,11 @@
 import * as users from './users'
-import * as products from './products'
-// import * as dishes from './dishes'
-// import * as shoppingLists from './shoppinglists'
-// import * as shoppingListProducts from './shoppinglistProducts'
-// import * as categories from './categories'
+ import * as products from './products'
+ // import * as recipes from './recipes'
+import * as shoppinglists from './shoppinglists'
+import * as shoppinglistProducts from './shoppinglistProducts'
+import * as categories from './categories'
+import * as userFavouriteProducts from './userFavouriteProducts'
+import * as productEntries from './productEntries'
 
 /**
  * Om het aantal import statements te beperken en de code overzichtelijk te houden, groeperen we alle dallll functies in
@@ -14,10 +16,12 @@ import * as products from './products'
  */
 export * from './users'
 export * from './products'
-// export * from './dishes'
-// export * from './shoppinglists'
-// export * from './shoppinglistProducts'
-// export * from './categories'
+// export * from './recipes'
+export * from './shoppinglists'
+export * from './shoppinglistProducts'
+export * from './categories'
+export * from './userFavouriteProducts'
+export * from './productEntries'
 
 /**
  * We voorzien hier een default export met alle actions in de volledige applicatie.
@@ -26,12 +30,14 @@ export * from './products'
  * groepeert.
  */
 const DAL = {
-  ...users,
+   ...users,
   ...products,
-  // ...dishes,
-  // ...shoppingLists,
-  // ...shoppingListProducts,
-  // ...categories,
+  // ...recipes,
+  ...shoppinglists,
+  ...shoppinglistProducts,
+  ...categories,
+  ...userFavouriteProducts,
+  ...productEntries,
 }
 
 export default DAL

@@ -11,7 +11,7 @@ export const productSchema = z.object({
         .int('Inhoud moet een geheel getal zijn.')
         .positive('Inhoud moet groter zijn dan nul.')
         .optional(),
-    productUnit: z.preprocess(value => (value === '' ? undefined : value), z.nativeEnum(UnitProduct).optional()),
+    unitProduct: z.preprocess(value => (value === '' ? undefined : value), z.nativeEnum(UnitProduct).optional()),
     numberOfItems: z.coerce
         .number({invalid_type_error: 'Aantal items moet een getal zijn'})
         .int('Aantal items moet een geheel getal zijn.')
