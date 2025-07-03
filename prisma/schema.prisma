@@ -83,7 +83,7 @@ model Product {
   brand                 String
   numberOfItems         Int
   volumeContent         Int?
-  packaging             PackagingProduct?
+  packagingProduct      PackagingProduct?
   unitProduct           UnitProduct?
   purchaseDate          DateTime?
   expiryDate            DateTime?
@@ -147,13 +147,12 @@ model Ingredient {
 }
 
 model ProductEntry {
-  id           String       @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  purchaseDate DateTime?    @default(now())
+  id           String    @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  purchaseDate DateTime? @default(now())
   expiryDate   DateTime?
-  quantity     Int          @default(1)
-  product      Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId    String       @db.Uuid
-  unitProduct  UnitProduct?
+  quantity     Int       @default(1)
+  product      Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId    String    @db.Uuid
 
   @@index([productId])
 }

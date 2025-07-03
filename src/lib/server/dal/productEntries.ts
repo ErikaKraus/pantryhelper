@@ -1,11 +1,10 @@
-import { ProductEntry, UnitProduct} from '@prisma/client'
+import { ProductEntry} from '@prisma/client'
 import 'server-only'
 import {prismaClient} from '@/lib/server/dal/prismaClient'
 
 export type CreateProductEntryParams = {
     productId: string,
     quantity: number,
-    unitProduct?: UnitProduct | null,
     purchaseDate?: Date | string | null,
     expiryDate?: Date | string | null,
 }
@@ -13,7 +12,6 @@ export type CreateProductEntryParams = {
 export type UpdateProductEntryParams = {
     id: string
     quantity?: number
-    unitProduct?: UnitProduct | null,
     purchaseDate?: Date | string | null,
     expiryDate?: Date | string | null,
 }
@@ -23,7 +21,6 @@ export async function createProductEntry(params: CreateProductEntryParams): Prom
         data: {
             product: {connect: {id: params.productId}},
             quantity: params.quantity,
-            unitProduct: params.unitProduct,
             purchaseDate: params.purchaseDate ? new Date(params.purchaseDate) : undefined,
             expiryDate: params.expiryDate ? new Date(params.expiryDate) : undefined,
         }
@@ -36,7 +33,6 @@ export async function updateProductEntry(params: UpdateProductEntryParams): Prom
         where: {id},
         data: {
             ...('quantity' in data && { quantity: data.quantity }),
-            ...('unitProduct' in data && { unitProduct: data.unitProduct }),
             ...('purchaseDate' in data && { purchaseDate: data.purchaseDate ? new Date(data.purchaseDate) : null }),
             ...('expiryDate' in data && { expiryDate: data.expiryDate ? new Date(data.expiryDate) : null }),
         }
