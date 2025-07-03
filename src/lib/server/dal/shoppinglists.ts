@@ -8,7 +8,7 @@ export type CreateShoppinglistParams = {
 }
 export type UpdateShoppinglistParams = Prisma.ShoppinglistUpdateInput
 
-export async function createShoppinglist(params:  {name: string, groupId: string}): Promise<Shoppinglist> {
+export async function createShoppinglist(params:  CreateShoppinglistParams): Promise<Shoppinglist> {
     return prismaClient.shoppinglist.create({
         data: {
             name: params.name,
