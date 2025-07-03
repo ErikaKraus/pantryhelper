@@ -1,19 +1,30 @@
 import 'server-only'
-import {Category, Prisma } from '@prisma/client'
+import {Category } from '@prisma/client'
 import {prismaClient} from '@/lib/server/dal/prismaClient'
 
-export type CreateCategoryParams = Prisma.CategoryUncheckedCreateInput
+export type CreateCategoryParams = {
+    name: string,
+    groupId: string,
+}
+
+export type UpdateCategoryParams = {
+    name: string,
+}
 
 export async function createCategory(params: CreateCategoryParams): Promise<Category> {
     return prismaClient.category.create({
         data: {
             name: params.name,
-            groupId: params.groupId,
-        },
+            group: {
+                connect: {
+                    id: params.groupId
+                }
+            },
+        }
     })
 }
 
-export async function updateCategory(id: string, params: CreateCategoryParams): Promise<Category> {
+export async function updateCategory(id: string, params: UpdateCategoryParams): Promise<Category> {
     return prismaClient.category.update({
         where: {id},
         data: {
