@@ -38,7 +38,7 @@ enum UnitProduct {
   KG
 }
 
-enum UnitDish {
+enum UnitRecipe {
   ML
   CL
   DL
@@ -52,16 +52,17 @@ enum UnitDish {
 }
 
 model User {
-  id                   String                 @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email                String                 @unique @db.VarChar(255)
-  password             String
-  firstName            String
-  lastName             String
-  sessions             Session[]
-  role                 Role
-  UserGroup            UserGroup[]
-  UserFavouriteProduct UserFavouriteProduct[]
-  UserFavouriteDish    UserFavouriteDish[]
+  id                    String                 @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                 String                 @unique @db.VarChar(255)
+  password              String
+  firstName             String
+  lastName              String
+  sessions              Session[]
+  role                  Role
+  userFavouriteProducts UserFavouriteProduct[]
+  userFavouriteRecipes  UserFavouriteRecipe[]
+  groupId               String                 @db.Uuid
+  group                 Group                  @relation(fields: [groupId], references: [id])
 }
 
 model Group {
@@ -69,22 +70,11 @@ model Group {
   name          String
   inviteCode    String         @unique
   createdAt     DateTime?      @default(now())
-  users         UserGroup[]
   products      Product[]
-  dishes        Dish[]
+  recipes       Recipe[]
   categories    Category[]
   shoppinglists Shoppinglist[]
-}
-
-model UserGroup {
-  id      String @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId  String @db.Uuid
-  user    User   @relation(fields: [userId], references: [id])
-  groupId String @db.Uuid
-  group   Group  @relation(fields: [groupId], references: [id])
-  role    Role
-
-  @@unique([userId, groupId])
+  users         User[]
 }
 
 model Product {
@@ -93,26 +83,27 @@ model Product {
   brand                 String
   numberOfItems         Int
   volumeContent         Int?
-  packaging             PackagingProduct?
+  packagingProduct      PackagingProduct?
   unitProduct           UnitProduct?
   purchaseDate          DateTime?
   expiryDate            DateTime?
   needsRestock          Boolean?
+  isOpen                Boolean?               @default(false)
   categories            Category[]
   shoppinglistProducts  ShoppinglistProduct[]
-  productDishes         ProductDish[]
+  ingredients           Ingredient[]
   productEntries        ProductEntry[]
   userFavouriteProducts UserFavouriteProduct[]
-  group                 Group?                 @relation(fields: [groupId], references: [id])
-  groupId               String?                @db.Uuid
+  group                 Group                  @relation(fields: [groupId], references: [id])
+  groupId               String                 @db.Uuid
 }
 
 model Category {
   id       String    @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name     String
   products Product[]
-  group    Group?    @relation(fields: [groupId], references: [id])
-  groupId  String?   @db.Uuid
+  group    Group     @relation(fields: [groupId], references: [id])
+  groupId  String    @db.Uuid
 }
 
 model Shoppinglist {
@@ -133,36 +124,35 @@ model ShoppinglistProduct {
   @@id([shoppinglistId, productId])
 }
 
-model Dish {
-  id                  String              @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name                String
-  instructions        String
-  productDishes       ProductDish[]
-  userFavouriteDishes UserFavouriteDish[]
-  group               Group?              @relation(fields: [groupId], references: [id])
-  groupId             String?             @db.Uuid
+model Recipe {
+  id                   String                @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                 String
+  instructions         String?
+  ingredients          Ingredient[]
+  userFavouriteRecipes UserFavouriteRecipe[]
+  group                Group?                @relation(fields: [groupId], references: [id])
+  groupId              String?               @db.Uuid
 }
 
-model ProductDish {
-  id        String   @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  amount    Int
-  unitDish  UnitDish
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId String   @db.Uuid
-  dish      Dish     @relation(fields: [dishId], references: [id], onDelete: Cascade)
-  dishId    String   @db.Uuid
+model Ingredient {
+  id         String     @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  amount     Int
+  unitRecipe UnitRecipe
+  product    Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId  String     @db.Uuid
+  recipe     Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipeId   String     @db.Uuid
 
-  @@unique([productId, dishId])
+  @@unique([productId, recipeId])
 }
 
 model ProductEntry {
-  id           String       @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  purchaseDate DateTime?    @default(now())
+  id           String    @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  purchaseDate DateTime? @default(now())
   expiryDate   DateTime?
-  quantity     Int          @default(1)
-  product      Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
-  productId    String       @db.Uuid
-  unitProduct  UnitProduct?
+  quantity     Int       @default(1)
+  product      Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId    String    @db.Uuid
 
   @@index([productId])
 }
@@ -177,14 +167,14 @@ model UserFavouriteProduct {
   @@unique([userId, productId])
 }
 
-model UserFavouriteDish {
-  id     String @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId String @db.Uuid
-  user   User   @relation(fields: [userId], references: [id])
-  dishId String @db.Uuid
-  dish   Dish   @relation(fields: [dishId], references: [id])
+model UserFavouriteRecipe {
+  id       String @id @unique @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId   String @db.Uuid
+  user     User   @relation(fields: [userId], references: [id])
+  recipeId String @db.Uuid
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
 
-  @@unique([userId, dishId])
+  @@unique([userId, recipeId])
 }
 
 model Session {

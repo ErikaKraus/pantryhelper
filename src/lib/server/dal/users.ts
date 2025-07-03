@@ -1,9 +1,8 @@
 import 'server-only'
 import {prismaClient} from './prismaClient'
 import {Prisma, Session, User, Role} from '@prisma/client'
-import {Profile, SessionWithProfile, sessionWithProfileInclude} from '@models'
+import {Profile, profileInclude, profileSelect, SessionWithProfile, sessionWithProfileInclude} from '@models'
 import {hashPassword} from '../utils'
-import {profileOmit} from '@models'
 import {randomBytes} from 'crypto'
 import {cache} from 'react'
 import {SessionDuration} from '../../constants'
@@ -16,13 +15,20 @@ export type CreateUserParams = {
 }
 
 export async function createUser(data: CreateUserParams): Promise<Profile> {
+  const group = await prismaClient.group.create({
+    data: {
+      name: `${data.firstName}'s voorraad`,
+      inviteCode: crypto.randomUUID(),
+    },
+  })
   return prismaClient.user.create({
     data: {
       ...data,
       password: hashPassword(data.password),
       role: Role.USER,
+      groupId: group.id,
     },
-    omit: profileOmit,
+    include: profileInclude,
   })
 }
 
@@ -66,7 +72,7 @@ export async function updateUser({id, ...data}: UpdateUserParams): Promise<Profi
     data: {
       ...data,
     },
-    omit: profileOmit,
+    select: profileSelect,
   })
 }
 
@@ -80,6 +86,7 @@ export async function updateUserPassword(params: {id: string; password: string})
     data: {
       password: hashed,
     },
+    select: profileSelect,
   })
 }
 

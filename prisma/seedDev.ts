@@ -1,38 +1,13 @@
-import {PrismaClient, UnitProduct, UnitDish, PackagingProduct} from '@prisma/client'
+import {PrismaClient, UnitProduct, UnitRecipe, PackagingProduct} from '@prisma/client'
 import {hashPassword} from '@serverUtils'
 
 export const seedDev = async (prisma: PrismaClient) => {
-
-    //Seed USER
-    const [user1, user2] = await prisma.user.createManyAndReturn({
-        data: [
-            {
-                email: 'user1@test.com',
-                firstName: 'User',
-                lastName: 'One',
-                password: hashPassword('test123'),
-                role: 'ADMIN'
-            },
-            {
-                email: 'user2@test.com',
-                firstName: 'User',
-                lastName: 'Two',
-                password: hashPassword('test123'),
-                role: 'USER'
-            },
-        ]
-    })
 
     //Seed GROUP
     const group1 = await prisma.group.create({
         data: {
             name: 'Testgroep van User1',
             inviteCode: 'DEVGROUPUSER1',
-            users: {
-                create: [
-                    {userId: user1.id, role: 'ADMIN'},
-                ],
-            },
         },
     })
 
@@ -40,13 +15,32 @@ export const seedDev = async (prisma: PrismaClient) => {
         data: {
             name: 'Testgroep van User2',
             inviteCode: 'DEVGROUPUSER2',
-            users: {
-                create: [
-                    {userId: user2.id, role: 'USER'},
-                ],
-            },
         },
     })
+
+    // Seed USERS
+    const [user1, user2] = await prisma.user.createManyAndReturn({
+        data: [
+            {
+                email: 'user1@test.com',
+                firstName: 'User',
+                lastName: 'One',
+                password: hashPassword('test123'),
+                role: 'ADMIN',
+                groupId: group1.id,
+            },
+            {
+                email: 'user2@test.com',
+                firstName: 'User',
+                lastName: 'Two',
+                password: hashPassword('test123'),
+                role: 'USER',
+                groupId: group2.id,
+            },
+        ],
+    })
+
+
 
     //Seed CATEGORIES
     const categoryNames = [
@@ -141,22 +135,22 @@ export const seedDev = async (prisma: PrismaClient) => {
     })
 
     //Seed DISH
-    const dish = await prisma.dish.create({
+    const recipe = await prisma.recipe.create({
         data: {
             name: 'Pasta met saus',
             instructions: 'Kook spaghetti en voeg saus toe.',
             groupId: group1.id,
-            productDishes: {
+            ingredients: {
                 create: [
                     {
                         productId: createdProducts[1].id,
                         amount: 200,
-                        unitDish: UnitDish.G,
+                        unitRecipe: UnitRecipe.G,
                     },
                     {
                         productId: createdProducts[2].id,
                         amount: 100,
-                        unitDish: UnitDish.G,
+                        unitRecipe: UnitRecipe.G,
                     }
                 ]
             }
