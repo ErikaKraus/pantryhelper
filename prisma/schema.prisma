@@ -88,6 +88,7 @@ model Product {
   purchaseDate          DateTime?
   expiryDate            DateTime?
   needsRestock          Boolean?
+  isOpen                Boolean?               @default(false)
   categories            Category[]
   shoppinglistProducts  ShoppinglistProduct[]
   ingredients           Ingredient[]

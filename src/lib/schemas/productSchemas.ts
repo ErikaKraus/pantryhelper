@@ -17,6 +17,7 @@ export const productSchema = z.object({
         .int('Aantal items moet een geheel getal zijn.')
         .nonnegative('Aantal items moet groter zijn dan nul.'),
     needsRestock: z.coerce.boolean().optional(),
+    isOpen: z.coerce.boolean().optional(),
     categoryIds: z.array(z.string().uuid()).optional(),
     shoppinglistIds: z.array(z.string().uuid()).optional(),
     }
