@@ -1,5 +1,5 @@
 import 'server-only'
-import {Category } from '@prisma/client'
+import {Category, Product} from '@prisma/client'
 import {prismaClient} from '@/lib/server/dal/prismaClient'
 
 export type CreateCategoryParams = {
@@ -48,6 +48,13 @@ export async function getCategoryById(id: string, groupId: string): Promise<Cate
 export async function getAllCategories(groupId: string): Promise<Category[]> {
     return prismaClient.category.findMany({
         where: {groupId},
+        orderBy: {name: 'asc'}
+    })
+}
+
+export async function getProductsByCategory(categoryId: string, groupId: string): Promise<Product[]> {
+    return prismaClient.product.findMany({
+        where: {groupId, categories: {some: {id: categoryId}}},
         orderBy: {name: 'asc'}
     })
 }
