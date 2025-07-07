@@ -1,7 +1,7 @@
 'use client'
 import {FunctionComponent} from 'react'
 import {FieldErrors} from 'react-hook-form'
-import {ServerFunctionResponse} from '@/models'
+import {ServerFunctionResponse} from '@models'
 
 interface FormErrorProps {
   path: string

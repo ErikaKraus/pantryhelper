@@ -36,14 +36,14 @@ export async function getUserByEmail(email: string): Promise<User | null> {
   return prismaClient.user.findFirst({where: {email}})
 }
 
-export async function startSession({id: userId, role}: Profile): Promise<Session> {
+export async function startSession(params: { id: string; role: Role }): Promise<Session> {
   const id = randomBytes(32).toString('hex')
   return prismaClient.session.create({
     data: {
       id,
-      userId,
+      userId: params.id,
       activeFrom: new Date(),
-      activeUntil: new Date(Date.now() + SessionDuration[role]),
+      activeUntil: new Date(Date.now() + SessionDuration[params.role]),
     },
   })
 }

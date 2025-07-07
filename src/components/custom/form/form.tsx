@@ -1,7 +1,7 @@
 'use client'
 import {FormEventHandler, FormHTMLAttributes, PropsWithChildren, useRef} from 'react'
 import {FieldPath, FieldValues, UseFormReturn} from 'react-hook-form'
-import {ServerFunctionResponse} from '@/models'
+import {ServerFunctionResponse} from '@models'
 import {CircleX} from 'lucide-react'
 
 interface FormProps<T extends FieldValues> extends PropsWithChildren, FormHTMLAttributes<HTMLFormElement> {

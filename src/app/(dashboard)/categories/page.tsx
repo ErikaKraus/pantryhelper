@@ -2,10 +2,6 @@ import {FunctionComponent} from 'react'
 import {getSessionProfileOrRedirect} from '@mediators'
 import {getAllCategories} from '@dal'
 import CategoryCard from '@/components/custom/card/categoryCard'
-import {CreateDialog} from '@/components/custom/dialog/createDialog'
-import {createCategorySchema} from '@schemas'
-import {createCategory} from '@actions'
-import {Input} from '@/components/ui/input'
 import AddCategoryDialog from '@/components/custom/dialog/addCategoryDialog'
 
 
