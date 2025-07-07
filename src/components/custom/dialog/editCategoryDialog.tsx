@@ -50,7 +50,7 @@ export default function  EditCategoryDialog({categoryId, currentName}: EditCateg
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="default" size="sm">Categorie wijzigen</Button>
+                <Button variant="default" size="sm">Wijzigen</Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>

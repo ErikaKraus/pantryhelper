@@ -26,19 +26,20 @@ export default async function CategoryPage({params}: CategoryPageProps) {
     const products = await getProductsByCategory(profile.groupId, categoryId)
 
     return (
-        <div className="p-6">
-            <div className="flex w-full items-center mb-4 justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold">{category.name}</h1>
-                </div>
-                <div className="flex gap-2">
-                    <EditCategoryDialog categoryId={categoryId} currentName={category.name}/>
-                    <DeleteCategoryButton categoryId={categoryId}/>
+        <div className="w-full p-6">
+            <div className="flex w-full items-center justify-between mb-4">
+                <h1 className="flex-1 text-2xl font-bold">{category.name}</h1>
+                <div className="flex space-x-2">
+                    <EditCategoryDialog categoryId={category.id} currentName={category.name} />
+                    <DeleteCategoryButton categoryId={categoryId} />
                 </div>
             </div>
 
-            {products.length === 0 ? <p>Geen producten in deze categorie</p> :
-            <OverviewProducts products={products}/>}
+    {products.length === 0 ? (
+                <p>Er zijn nog geen producten in deze categorie.</p>
+            ) : (
+                <OverviewProducts products={products} />
+            )}
         </div>
     )
 }
