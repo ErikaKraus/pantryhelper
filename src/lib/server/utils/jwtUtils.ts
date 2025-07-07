@@ -26,7 +26,7 @@ export const createJwtToken = (user: User) => {
     {
       email: user.email,
       id: user.id,
-      username: user.username,
+      // username: user.username,
     },
     PRIVATE_KEY_DECODED,
     {
