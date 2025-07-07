@@ -104,6 +104,8 @@ model Category {
   products Product[]
   group    Group     @relation(fields: [groupId], references: [id])
   groupId  String    @db.Uuid
+
+  @@unique([groupId, name])
 }
 
 model Shoppinglist {

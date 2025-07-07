@@ -9,6 +9,7 @@ export type CreateCategoryParams = {
 
 export type UpdateCategoryParams = {
     name: string,
+    groupId: string,
 }
 
 export async function createCategory(params: CreateCategoryParams): Promise<Category> {
@@ -56,5 +57,19 @@ export async function getProductsByCategory(categoryId: string, groupId: string)
     return prismaClient.product.findMany({
         where: {groupId, categories: {some: {id: categoryId}}},
         orderBy: {name: 'asc'}
+    })
+}
+
+export async function getCategoryByName(
+    name: string,
+    groupId: string
+): Promise<Category | null> {
+    return prismaClient.category.findFirst({
+        where: {
+            groupId,
+            name: {
+                equals: name,
+                mode: 'insensitive',
+            } },
     })
 }

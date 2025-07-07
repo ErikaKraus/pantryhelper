@@ -12,6 +12,7 @@ export default function DeleteCategoryButton({categoryId}: DeleteCategoryButtonP
             action={() => Actions.deleteCategory({id: categoryId})}
             variant="destructive"
             pendingContent="Verwijderen"
+            size='sm'
         >
             Verwijderen
         </ActionButton>

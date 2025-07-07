@@ -1,32 +1,48 @@
 'use client'
-import {FunctionComponent, useActionState, useEffect, useState} from 'react'
+
+import {updateCategorySchema} from '@schemas'
+import z from 'zod'
 import {useRouter} from 'next/navigation'
+import {useActionState, useEffect, useState} from 'react'
 import Actions from '@actions'
-import {zodResolver} from '@hookform/resolvers/zod'
-import {useForm} from 'react-hook-form'
-import {createCategorySchema} from '@schemas'
 import {useZodValidatedForm} from '@hooks'
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from '@/components/ui/dialog'
 import {Button} from '@/components/ui/button'
-import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger} from '@/components/ui/dialog'
-import {z} from 'zod'
-import Form from '@/components/custom/form/form'
+import Form from '../form/form'
 import {Input} from '@/components/ui/input'
 import FormError from '@/components/custom/form/formError'
 import SubmitButtonWithLoading from '@/components/custom/button/submitButtonWithLoading'
 import {Label} from '@/components/ui/label'
 
-type CategoryFormValues = z.infer<typeof createCategorySchema>
+type FormValues = z.infer<typeof updateCategorySchema>
 
+interface EditCategoryDialogProps {
+    categoryId: string
+    currentName: string
+}
 
-export default function AddCategoryDialog() {
+export default function  EditCategoryDialog({categoryId, currentName}: EditCategoryDialogProps) {
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(false)
-    const [actionResult, createCategory, isPending] = useActionState(Actions.createCategory, {success: false})
-    const hookForm = useZodValidatedForm(createCategorySchema)
+    const [actionResult, updateCategory, isPending] = useActionState(Actions.updateCategory, {success: false})
+    const hookForm = useZodValidatedForm(updateCategorySchema, {
+        defaultValues: {
+            id: categoryId,
+            name: currentName
+        }
+    })
 
     useEffect(() => {
         if (!isPending && actionResult?.success) {
-            hookForm.reset()
+            hookForm.reset({id: categoryId, name: hookForm.getValues('name')})
             setIsOpen(false)
         }
     }, [isPending, hookForm, actionResult.success])
@@ -34,26 +50,33 @@ export default function AddCategoryDialog() {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="default" size="sm">Categorie toevoegen</Button>
+                <Button variant="default" size="sm">Categorie wijzigen</Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Nieuwe categorie aanmaken</DialogTitle>
+                    <DialogTitle>Categorie wijzigen</DialogTitle>
                 </DialogHeader>
-                <Form<CategoryFormValues>
+
+                <Form
                     hookForm={hookForm}
-                    action={createCategory}
+                    action={updateCategory}
                     actionResult={actionResult}
                 >
+                    <input type="hidden" {...hookForm.register('id')} value={categoryId} />
+
                     <div className="space-y-4">
                         <div>
-                            <Label htmlFor="name">Naam</Label>
+                            <Label htmlFor="name" >
+                                Naam
+                            </Label>
                             <Input
                                 className="mt-3"
                                 id="name"
                                 {...hookForm.register('name')}
-                                defaultValue={actionResult?.submittedData?.name ?? ''}
-                                placeholder="Bijvoorbeeld 'Groenten', 'Fruit', ..." />
+                                placeholder="Nieuwe naam"
+                                defaultValue={actionResult?.submittedData?.name ?? currentName}
+
+                            />
                             <FormError
                                 path="name"
                                 formErrors={hookForm.formState.errors}
@@ -69,7 +92,7 @@ export default function AddCategoryDialog() {
                             variant="outline"
                             onClick={() => {
                                 setIsOpen(false)
-                                hookForm.reset()
+                                hookForm.reset({id: categoryId, name: currentName})
                             }}>
                             Annuleren
                         </Button>
@@ -78,6 +101,5 @@ export default function AddCategoryDialog() {
             </DialogContent>
         </Dialog>
     )
-
-
 }
+
