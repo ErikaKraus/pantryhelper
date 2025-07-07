@@ -112,7 +112,7 @@ export const seedDev = async (prisma: PrismaClient) => {
             data: {
                 name: product.name,
                 brand: product.brand,
-                packaging: product.packaging as PackagingProduct,
+                packagingProduct: product.packaging as PackagingProduct,
                 volumeContent: product.volumeContent,
                 unitProduct: product.unitProduct as UnitProduct,
                 numberOfItems: product.numberOfItems,

@@ -2,6 +2,7 @@ import {getSessionProfileOrRedirect} from '@mediators'
 import {getCategoryById, getProductsByCategory} from '@dal'
 import {notFound} from 'next/navigation'
 import OverviewProducts from '@/components/custom/products/OverviewProducts'
+import DeleteCategoryButton from '@/components/custom/button/categories/deleteCategoryButton'
 
 interface CategoryPageProps {
     params: Promise<{ categoryId: string }>
@@ -23,13 +24,21 @@ export default async function CategoryPage({params}: CategoryPageProps) {
     //3 fetch products
     const products = await getProductsByCategory(profile.groupId, categoryId)
 
-
     return (
-        <>
-            <h1>Categorie: {category.name}</h1>
+        <div className="p-6">
+            <div className="flex w-full items-center mb-4 justify-between">
+                <div>
+                    <h1 className="text-2xl font-bold">{category.name}</h1>
+                </div>
+                <div className="flex gap-2">
+                    <p>Wijzigen</p>
+                    <DeleteCategoryButton categoryId={categoryId}/>
+                </div>
+            </div>
+
             {products.length === 0 ? <p>Geen producten in deze categorie</p> :
             <OverviewProducts products={products}/>}
-        </>
+        </div>
     )
 }
 
