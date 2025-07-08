@@ -17,7 +17,7 @@ const Layout: FunctionComponent<PropsWithChildren> = async ({children}) => {
   return (
     <SidebarProvider>
       <AppSidebar user={profile!} />
-      <main>
+      <main className="flex-1 w-full p-6">
         <SidebarTrigger />
         {children}
       </main>
