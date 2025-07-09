@@ -19,12 +19,21 @@ export const createProductEntry = formAction(createProductEntrySchema, async (pr
 })
 
 export const updateProductEntry = formAction(updateProductEntrySchema, async (productEntry, profile) => {
+    const oldProductEntry = await DAL.getProductEntryById(productEntry.id)
+    if (!oldProductEntry) {throw new Error('Productregistratie niet gevonden.')}
+
     await DAL.updateProductEntry({
         id: productEntry.id,
         quantity: productEntry.quantity,
         purchaseDate: productEntry.purchaseDate,
         expiryDate: productEntry.expiryDate,
         })
+
+    const difference = productEntry.quantity - oldProductEntry.quantity
+    if (difference !== 0) {
+        await DAL.incrementProductStock(productEntry.productId, difference)
+    }
+
     revalidatePath(`/products/${productEntry.productId}`)
 })
 

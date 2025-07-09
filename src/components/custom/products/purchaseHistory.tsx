@@ -4,6 +4,7 @@ import {ProductEntry} from '@prisma/client'
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/components/ui/table'
 import {Card} from '@/components/ui/card'
 import DeleteProductEntryButton from '@/components/productEntries/deleteProductEntryButton'
+import EditProductEntryDialog from '@/components/productEntries/editProductEntryDialog'
 
 
 interface PurchaseHistoryProps {
@@ -49,6 +50,7 @@ export default function PurchaseHistory({productEntries}: PurchaseHistoryProps) 
                                 : '–'}</TableCell>
                             <TableCell>{productEntry.quantity}</TableCell>
                             <TableCell>
+                                <EditProductEntryDialog productEntry={productEntry} productId={productEntry.productId} />
                                 <DeleteProductEntryButton productEntryId={productEntry.id} productId={productEntry.productId} />
                             </TableCell>
                         </TableRow>
