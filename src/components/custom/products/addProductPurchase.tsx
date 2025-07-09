@@ -43,7 +43,7 @@ export default function AddProductPurchase({productId}: AddProductPurchaseProps)
         <Card>
             <Form<FormValues> hookForm={hookForm} action={createProductEntry} actionResult={actionResult}>
             <CardHeader>
-                <CardTitle>Aankoop toevoegen</CardTitle>
+                <CardTitle className="text-xl">Aankoop toevoegen</CardTitle>
             </CardHeader>
             <CardContent className="mt-3">
                 <div className="grid grid-cols-3 gap-4">

@@ -47,7 +47,9 @@ export async function getProductById(id: string, groupId: string): Promise<Produ
             categories: true,
             shoppinglistProducts: true,
             ingredients: true,
-            productEntries: true,
+            productEntries: {
+                orderBy: {purchaseDate: 'desc'},
+            },
             userFavouriteProducts: true,
         },
     })

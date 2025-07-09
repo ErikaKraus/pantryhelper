@@ -1,7 +1,7 @@
 'use client'
 
 import {ProductEntry} from '@prisma/client'
-import {Table, TableBody, TableCell, TableHeader, TableRow} from '@/components/ui/table'
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/components/ui/table'
 import {Card} from '@/components/ui/card'
 
 interface PurchaseHistoryProps {
@@ -17,14 +17,14 @@ export default function PurchaseHistory({productEntries}: PurchaseHistoryProps) 
     )
 
     return (
-        <Card>
-            <h1 className="text-3xl font-bold">Aankoopgeschiedenis</h1>
+        <Card className="p-6">
+            <h1 className="text-xl font-bold">Aankoopgeschiedenis</h1>
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableCell>Aankoopdatum</TableCell>
-                        <TableCell>Houdbaarheidsdatum</TableCell>
-                        <TableCell>Aantal</TableCell>
+                        <TableHead>Aankoopdatum</TableHead>
+                        <TableHead>Houdbaarheidsdatum</TableHead>
+                        <TableHead>Aantal</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
