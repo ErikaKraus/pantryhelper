@@ -12,6 +12,7 @@ products: Product[]
 const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products}) => {
     return (
         <div className="overflow-x-auto w-full">
+
         <Table>
             <TableHeader>
                 <TableRow className="bg-gray-100">

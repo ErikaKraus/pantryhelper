@@ -3,7 +3,7 @@ import {getSessionProfileOrRedirect} from '@mediators'
 import {getProductById} from '@dal'
 
 export default async function ProductPage({params}: { params: { productId: string }})  {
-    const { productId } = params
+    const { productId } = await params
 
     const profile = await getSessionProfileOrRedirect()
     const product = await getProductById(productId, profile.groupId)

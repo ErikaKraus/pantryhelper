@@ -6,6 +6,7 @@ import {Checkbox} from '@/components/ui/checkbox'
 import {Badge} from '@/components/ui/badge'
 import {Label} from '@/components/ui/label'
 import {Card, CardContent, CardHeader} from '@/components/ui/card'
+import {Heart} from 'lucide-react'
 
 
 
@@ -22,14 +23,22 @@ export default function DetailProduct({product}: DetailProductProps)  {
     return (
         <Card className="w-full">
             <CardHeader>
+                <div className="flex w-full items-center justify-between">
+
                 <h1 className="text-3xl font-bold">
                     {name}{' '}
                     {numberOfItems > 0 && (
                         <span className="text-xl font-normal text-muted-foreground">
-    ({numberOfItems}{' '}
+                            ({numberOfItems}{' '}
                             {numberOfItems === 1 ? 'stuk' : 'stuks'})
-  </span>)}
+                        </span>)}
                 </h1>
+                    <Heart
+                        className={`h-6 w-6 cursor-pointer transition-colors ${
+                            userFavourite ? 'text-black' : 'text-gray-400'
+                        }`}
+                    />
+                </div>
             </CardHeader>
             <CardContent>
                 <div className="mt-1">
@@ -65,19 +74,12 @@ export default function DetailProduct({product}: DetailProductProps)  {
 
             {/* Checkboxes */}
             <div className="flex items-center space-x-6 mt-3">
-                <div className="flex items-center space-x-2">
-                    <Label htmlFor="isOpen" className="font-semibold">Geopend?</Label>
-                    <Checkbox id="isOpen" defaultChecked={!!isOpen} disabled />
-                </div>
-                <div className="flex items-center space-x-2">
-                    <Label htmlFor="userFavourite" className="font-semibold">Favoriet?</Label>
-                    <Checkbox
-                        id="userFavourite"
-                        defaultChecked={userFavourite}
-                        disabled
-                    />
-                </div>
-
+                {numberOfItems === 1 && (
+                    <div className="flex items-center space-x-2">
+                        <Label htmlFor="isOpen" className="font-semibold">Geopend?</Label>
+                        <Checkbox id="isOpen" defaultChecked={!!isOpen} disabled />
+                    </div>
+                )}
         </div>
             </CardContent>
         </Card>
