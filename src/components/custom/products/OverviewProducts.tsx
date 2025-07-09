@@ -19,7 +19,6 @@ const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products}) 
                     <TableHead className="px-4 py-2">Naam</TableHead>
                     <TableHead className="px-4 py-2">Merk</TableHead>
                     <TableHead className="px-4 py-2">Voorraad</TableHead>
-                    <TableHead className="px-4 py-2">Details</TableHead>
                     <TableHead className="px-4 py-2">Acties</TableHead>
                 </TableRow>
             </TableHeader>
@@ -32,11 +31,10 @@ const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products}) 
                         <TableCell>
                             <Link href={`/products/${product.id}`}>
                                 <button className="text-gray-600 hover:text-gray-800" title="Bekijk">
-                                    <Eye size={18} />
+                                    <Eye size={20} />
                                 </button>
                             </Link>
                         </TableCell>
-                        <TableCell></TableCell>
                     </TableRow>
                 ))}
             </TableBody>

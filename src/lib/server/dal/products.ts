@@ -1,9 +1,27 @@
 import 'server-only'
 import {prismaClient} from '@/lib/server/dal/prismaClient'
-import {Category, Prisma, Product, ProductEntry, ShoppinglistProduct, UserFavouriteProduct, Ingredient} from '@prisma/client'
+import {
+    Category,
+    Prisma,
+    Product,
+    ProductEntry,
+    ShoppinglistProduct,
+    UserFavouriteProduct,
+    Ingredient,
+    PackagingProduct, UnitProduct
+} from '@prisma/client'
 
 export type CreateProductParams = Prisma.ProductCreateInput
 export type UpdateProductParams = Prisma.ProductUpdateInput
+
+export type FindDuplicateProductParams = {
+    name: string
+    brand: string
+    packagingProduct?: PackagingProduct | null
+    volumeContent?: number | null
+    unitProduct?: UnitProduct | null
+    groupId: string
+}
 
 export type ProductWithRels = Product & {
     categories: Category[]
@@ -73,5 +91,35 @@ export async function incrementProductStock(productId: string, amount: number) {
         data: {
             numberOfItems: {increment: amount},
         }
+    })
+}
+
+export async function findDuplicatieProduct(params: FindDuplicateProductParams): Promise<Product | null> {
+    const {name, brand, packagingProduct, volumeContent, unitProduct, groupId} = params
+    return prismaClient.product.findFirst({
+        where: {
+            groupId,
+            name: {equals: name, mode: 'insensitive'},
+            brand: {equals: brand, mode: 'insensitive'},
+            packagingProduct,
+            volumeContent,
+            unitProduct,
+            }
+        }
+    )
+}
+
+export async function findDuplicateProductExcludingId(params: FindDuplicateProductParams & { id: string }): Promise<Product | null> {
+    const { id, ...rest } = params
+    return prismaClient.product.findFirst({
+        where: {
+            groupId: rest.groupId,
+            id: { not: id },
+            name: { equals: rest.name, mode: 'insensitive' },
+            brand: { equals: rest.brand, mode: 'insensitive' },
+            packagingProduct: rest.packagingProduct,
+            volumeContent: rest.volumeContent,
+            unitProduct: rest.unitProduct,
+        },
     })
 }

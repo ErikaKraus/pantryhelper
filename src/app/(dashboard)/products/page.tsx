@@ -1,6 +1,7 @@
 import {getSessionProfileOrRedirect} from '@mediators'
-import { getAllProducts} from '@dal'
+import {getAllCategories, getAllProducts} from '@dal'
 import OverviewProducts from '@/components/custom/products/OverviewProducts'
+import AddProductDialog from '@/components/custom/products/addProductDialog'
 
 interface ProductsPageProps {
     searchParams: Promise<{q?: string, category?:string}>
@@ -9,11 +10,14 @@ interface ProductsPageProps {
 export default async function ProductsPage() {
     const profile = await getSessionProfileOrRedirect()
     const products = await getAllProducts(profile.groupId)
+    const categories = await getAllCategories(profile.groupId)
 
     return (
         <div className="w-full p-6">
-            <h1 className="text-2xl font-bold">Voorraad</h1>
-            {products.length === 0 ? (
+            <div className="flex justify-between items-center">
+                <h1 className="text-2xl font-bold">Producten</h1>
+                <AddProductDialog categories={categories} />
+            </div>            {products.length === 0 ? (
                 <p>Er zijn nog geen producten.</p>
             ) : (
                 <OverviewProducts products={products} />

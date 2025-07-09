@@ -5,7 +5,7 @@ export const productSchema = z.object({
     id: z.string().uuid(),
     name: z.string().min(1, 'Vul een naam in.'),
     brand: z.string().min(1, 'Vul een merk in.'),
-    packaging: z.preprocess(value => (value === '' ? undefined : value), z.nativeEnum(PackagingProduct).optional()),
+    packagingProduct: z.preprocess(value => (value === '' ? undefined : value), z.nativeEnum(PackagingProduct).optional()),
     volumeContent: z.coerce
         .number({invalid_type_error: 'Inhoud moet een getal zijn'})
         .int('Inhoud moet een geheel getal zijn.')
