@@ -4,6 +4,7 @@ import {Product} from '@prisma/client'
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/components/ui/table'
 import Link from 'next/link'
 import {Eye} from 'lucide-react'
+import DeleteProductButton from '@/components/custom/products/deleteProductButton'
 
 interface OverviewProductsProps {
 products: Product[]
@@ -34,6 +35,7 @@ const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products}) 
                                     <Eye size={20} />
                                 </button>
                             </Link>
+                            <DeleteProductButton productId={product.id}/>
                         </TableCell>
                     </TableRow>
                 ))}
