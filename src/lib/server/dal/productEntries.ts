@@ -57,3 +57,4 @@ export async function getAllProductEntries(productId: string): Promise<ProductEn
         orderBy: {purchaseDate: 'desc'}
     })
 }
+

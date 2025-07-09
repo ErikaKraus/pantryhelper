@@ -66,3 +66,12 @@ export async function getAllProducts(groupId: string): Promise<Product[]> {
         }
     )
 }
+
+export async function incrementProductStock(productId: string, amount: number) {
+    return prismaClient.product.update({
+        where: {id: productId},
+        data: {
+            numberOfItems: {increment: amount},
+        }
+    })
+}
