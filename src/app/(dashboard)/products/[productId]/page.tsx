@@ -1,6 +1,7 @@
 import DetailProduct from '@/components/custom/products/detailProduct'
 import {getSessionProfileOrRedirect} from '@mediators'
 import {getProductById} from '@dal'
+import PurchaseHistory from '@/components/custom/products/purchaseHistory'
 
 export default async function ProductPage({params}: { params: { productId: string }})  {
     const { productId } = await params
@@ -20,10 +21,12 @@ export default async function ProductPage({params}: { params: { productId: strin
     )
     return (
         <div>
-
-        <DetailProduct
+            <DetailProduct
                 product={{ ...product, userFavourite }}
             />
+            <div className="mt-5">
+                <PurchaseHistory productEntries={product.productEntries} />
+            </div>
         </div>
     )
 }
