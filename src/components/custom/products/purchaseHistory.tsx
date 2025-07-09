@@ -3,6 +3,8 @@
 import {ProductEntry} from '@prisma/client'
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/components/ui/table'
 import {Card} from '@/components/ui/card'
+import DeleteProductEntryButton from '@/components/productEntries/deleteProductEntryButton'
+
 
 interface PurchaseHistoryProps {
     productEntries: ProductEntry[]
@@ -10,8 +12,8 @@ interface PurchaseHistoryProps {
 
 export default function PurchaseHistory({productEntries}: PurchaseHistoryProps) {
     if(productEntries.length === 0) return (
-            <Card className="w-full">
-                <h1 className="text-3xl font-bold">Aankoopgeschiedenis</h1>
+            <Card className="w-full p-6">
+                <h1 className="text-xl font-bold">Aankoopgeschiedenis</h1>
                 <p>Er zijn nog geen aankopen geregistreerd.</p>
             </Card>
     )
@@ -25,6 +27,7 @@ export default function PurchaseHistory({productEntries}: PurchaseHistoryProps) 
                         <TableHead>Aankoopdatum</TableHead>
                         <TableHead>Houdbaarheidsdatum</TableHead>
                         <TableHead>Aantal</TableHead>
+                        <TableHead>Acties</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -45,6 +48,9 @@ export default function PurchaseHistory({productEntries}: PurchaseHistoryProps) 
                                 })
                                 : '–'}</TableCell>
                             <TableCell>{productEntry.quantity}</TableCell>
+                            <TableCell>
+                                <DeleteProductEntryButton productEntryId={productEntry.id} productId={productEntry.productId} />
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

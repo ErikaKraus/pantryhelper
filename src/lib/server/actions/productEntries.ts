@@ -28,8 +28,9 @@ export const updateProductEntry = formAction(updateProductEntrySchema, async (pr
     revalidatePath(`/products/${productEntry.productId}`)
 })
 
-export const deleteProductEntry = serverFunction(deleteProductEntrySchema, async ({id, productId}, profile) => {
-    await DAL.deleteProductEntry(id)
+export const deleteProductEntry = serverFunction(deleteProductEntrySchema, async ({id}, profile) => {
+    const {productId, quantity} = await DAL.deleteProductEntry(id)
+    await DAL.incrementProductStock(productId, -quantity)
     revalidatePath(`/products/${productId}`)
 })
 

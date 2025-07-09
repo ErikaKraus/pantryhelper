@@ -39,9 +39,13 @@ export async function updateProductEntry(params: UpdateProductEntryParams): Prom
     })
 }
 
-export async function deleteProductEntry(id: string): Promise<void> {
-    await prismaClient.productEntry.delete({
+export async function deleteProductEntry(id: string): Promise<{ productId: string; quantity: number }> {
+    return await prismaClient.productEntry.delete({
         where: {id},
+        select: {
+            productId: true,
+            quantity: true
+        }
     })
 }
 
