@@ -2,8 +2,14 @@ import {z} from 'zod'
 
 export const productEntrySchema = z.object({
     id: z.string().uuid(),
-    purchaseDate: z.coerce.date().optional(),
-    expiryDate: z.coerce.date().optional(),
+    purchaseDate: z.preprocess(
+        (val) => (val === '' ? undefined : val),
+        z.coerce.date().optional()
+    ),
+    expiryDate: z.preprocess(
+        (val) => (val === '' ? undefined : val),
+        z.coerce.date().optional()
+    ),
     quantity: z.coerce
         .number({invalid_type_error: 'Hoeveelheid moet een getal zijn'})
         .int('Hoeveelheid moet een geheel getal zijn.')
