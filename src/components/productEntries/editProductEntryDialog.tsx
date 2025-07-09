@@ -16,7 +16,7 @@ import {
     DialogTitle,
     DialogTrigger
 } from '@/components/ui/dialog'
-import {Edit} from 'lucide-react'
+import { SquarePen} from 'lucide-react'
 import Form from '@/components/custom/form/form'
 import {Input} from '@/components/ui/input'
 import FormError from '@/components/custom/form/formError'
@@ -54,9 +54,9 @@ export default function EditProductEntryDialog ({productEntry, productId}: EditP
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <button aria-label="Aankoop bewerken" className="text-gray-500 hover:text-blue-600">
-                    <Edit size={16}/>
-                </button>
+                <Button aria-label="Aankoop bewerken" className="text-gray-500 hover:text-blue-600" size="sm" variant="outline">
+                    <SquarePen size={16}/>
+                </Button>
             </DialogTrigger>
             <DialogContent className="w-85%">
                 <DialogHeader>

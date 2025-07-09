@@ -49,7 +49,7 @@ export default function PurchaseHistory({productEntries}: PurchaseHistoryProps) 
                                 })
                                 : '–'}</TableCell>
                             <TableCell>{productEntry.quantity}</TableCell>
-                            <TableCell>
+                            <TableCell className="flex gap-2">
                                 <EditProductEntryDialog productEntry={productEntry} productId={productEntry.productId} />
                                 <DeleteProductEntryButton productEntryId={productEntry.id} productId={productEntry.productId} />
                             </TableCell>
