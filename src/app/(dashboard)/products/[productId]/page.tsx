@@ -2,6 +2,7 @@ import DetailProduct from '@/components/custom/products/detailProduct'
 import {getSessionProfileOrRedirect} from '@mediators'
 import {getProductById} from '@dal'
 import PurchaseHistory from '@/components/custom/products/purchaseHistory'
+import AddProductPurchase from '@/components/custom/products/addProductPurchase'
 
 export default async function ProductPage({params}: { params: { productId: string }})  {
     const { productId } = await params
@@ -21,9 +22,16 @@ export default async function ProductPage({params}: { params: { productId: strin
     )
     return (
         <div>
-            <DetailProduct
-                product={{ ...product, userFavourite }}
-            />
+            <div className="flex items-center justify-between mb-4">
+                <DetailProduct
+                    product={{ ...product, userFavourite }}
+                />
+            </div>
+            <div>
+                <AddProductPurchase productId={product.id} />
+
+            </div>
+
             <div className="mt-5">
                 <PurchaseHistory productEntries={product.productEntries} />
             </div>
