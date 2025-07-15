@@ -6,6 +6,7 @@ import Link from 'next/link'
 import {Eye} from 'lucide-react'
 import DeleteProductButton from '@/components/custom/products/deleteProductButton'
 import EditProductDialog from '@/components/custom/products/editProductDialog'
+import {Button} from '@/components/ui/button'
 
 interface OverviewProductsProps {
 products: Product[]
@@ -30,11 +31,11 @@ const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products}) 
                         <TableCell>{product.name}</TableCell>
                         <TableCell>{product.brand}</TableCell>
                         <TableCell>{product.numberOfItems}</TableCell>
-                        <TableCell>
+                        <TableCell className="flex gap-2" >
                             <Link href={`/products/${product.id}`}>
-                                <button className="text-gray-600 hover:text-gray-800" title="Bekijk">
+                                <Button className="text-gray-600 hover:text-gray-800" title="Bekijk" size="sm" color="">
                                     <Eye size={20} />
-                                </button>
+                                </Button>
                             </Link>
                             <EditProductDialog product={product}  />
                             <DeleteProductButton productId={product.id}/>

@@ -16,7 +16,9 @@ export default async function ProductsPage() {
         <div className="w-full p-6">
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold">Producten</h1>
-                <AddProductDialog categories={categories} />
+                <div className="mb-3">
+                    <AddProductDialog categories={categories} />
+                </div>
             </div>            {products.length === 0 ? (
                 <p>Er zijn nog geen producten.</p>
             ) : (
