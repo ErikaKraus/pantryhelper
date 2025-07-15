@@ -40,6 +40,19 @@ export const createProduct = formAction(createProductSchema, async (product, pro
 })
 
 export const updateProduct = formAction(updateProductSchema, async (product, profile) => {
+    const {
+        id,
+        name,
+        brand,
+        packagingProduct,
+        volumeContent,
+        unitProduct,
+        numberOfItems,
+        needsRestock,
+        isOpen,
+        categoryIds,
+        shoppinglistIds} = product
+
     const duplicateProduct = await DAL.findDuplicateProductExcludingId({
         id: product.id,
         name: product.name,
@@ -59,12 +72,23 @@ export const updateProduct = formAction(updateProductSchema, async (product, pro
         }
     }
     // const { id, categoryIds, ...rest } = product
-    await DAL.updateProduct(product.id, {
-        ...product,                              // unitProduct én packaging én isOpen gaan automatisch mee
+    await DAL.updateProduct(id, {
+        name,
+        brand,
+        packagingProduct,
+        volumeContent,
+        unitProduct,
+        numberOfItems,
+        needsRestock,
+        isOpen,
         group: { connect: { id: profile.groupId } },
-        categories: product.categoryIds?.length
-            ? { connect: product.categoryIds.map(id => ({ id })) }
+        categories: categoryIds
+            ? { set: categoryIds.map((cid) => ({ id: cid })) }
             : undefined,
+        // als je shoppinglists meeneemt:
+        // shoppinglistProducts: shoppinglistIds
+        //     ? { set: shoppinglistIds.map((sid) => ({ shoppinglistId: sid, productId: id })) }
+        //     : undefined,
     })
     revalidatePath(`/products/${product.id}`)
 

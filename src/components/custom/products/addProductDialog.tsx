@@ -42,7 +42,7 @@ interface AddProductDialogProps {
 
 export default function AddProductDialog ({categories}: AddProductDialogProps)  {
     const router = useRouter()
-    const [open, setOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
     const [actionResult, createProduct, isPending] = useActionState(Actions.createProduct, {success: false})
     const hookForm = useZodValidatedForm(createProductSchema, {
         defaultValues: {
@@ -63,13 +63,13 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
     useEffect(() => {
         if (!isPending && actionResult?.success) {
             hookForm.reset()
-            setOpen(false)
+            setIsOpen(false)
             router.refresh()
         }
     }, [actionResult.success, isPending, hookForm, router])
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
                 <Button size="sm">Nieuw product</Button>
             </DialogTrigger>

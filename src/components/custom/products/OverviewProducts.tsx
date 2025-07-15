@@ -36,7 +36,7 @@ const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products}) 
                                     <Eye size={20} />
                                 </button>
                             </Link>
-                            <EditProductDialog/>
+                            <EditProductDialog product={product}  />
                             <DeleteProductButton productId={product.id}/>
                         </TableCell>
                     </TableRow>

@@ -41,7 +41,7 @@ export async function createProduct(data: CreateProductParams) {
     })
 }
 
-export async function updateProduct(id: string, data: UpdateProductParams) {
+export async function updateProduct(id: string, data: Prisma.ProductUpdateInput) {
     return prismaClient.product.update({
         where: {id},
         data,
