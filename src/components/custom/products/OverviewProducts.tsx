@@ -5,6 +5,7 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/c
 import Link from 'next/link'
 import {Eye} from 'lucide-react'
 import DeleteProductButton from '@/components/custom/products/deleteProductButton'
+import EditProductDialog from '@/components/custom/products/editProductDialog'
 
 interface OverviewProductsProps {
 products: Product[]
@@ -35,6 +36,7 @@ const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products}) 
                                     <Eye size={20} />
                                 </button>
                             </Link>
+                            <EditProductDialog/>
                             <DeleteProductButton productId={product.id}/>
                         </TableCell>
                     </TableRow>
