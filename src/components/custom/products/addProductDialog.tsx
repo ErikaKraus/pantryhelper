@@ -151,7 +151,8 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectLabel                                 className="mt-1"
+                                        <SelectLabel
+                                            className="mt-1"
                                         >Verpakking</SelectLabel>
                                         {Object.values(PackagingProduct).map((pkg) => (
                                             <SelectItem key={pkg} value={pkg}>
@@ -176,7 +177,7 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
                                     className="mt-1"
                                     id="volumeContent"
                                     type="number"
-                                    {...hookForm.register('volumeContent', { valueAsNumber: true })}
+                                    {...hookForm.register('volumeContent') }
                                     placeholder="Aantal"
                                 />
                                 <FormError
