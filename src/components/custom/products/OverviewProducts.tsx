@@ -33,7 +33,8 @@ const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products}) 
                         <TableCell>{product.numberOfItems}</TableCell>
                         <TableCell className="flex gap-2" >
                             <Link href={`/products/${product.id}`}>
-                                <Button className="text-gray-600 hover:text-gray-800" title="Bekijk" size="sm" color="">
+                                <Button className="text-gray-600 hover:text-gray-800" title="Bekijk" size="sm"   variant="outline"
+                                >
                                     <Eye size={20} />
                                 </Button>
                             </Link>

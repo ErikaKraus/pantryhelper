@@ -88,6 +88,7 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
                         <div>
                             <Label htmlFor="name">Naam</Label>
                             <Input
+                                className="mt-1"
                                 id="name"
                                 {...hookForm.register('name')}
                                 placeholder="Productnaam"
@@ -103,6 +104,7 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
                         <div>
                             <Label htmlFor="brand">Merk</Label>
                             <Input
+                                className="mt-1"
                                 id="brand"
                                 {...hookForm.register('brand')}
                                 placeholder="Merk"
@@ -118,6 +120,7 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
                         <div>
                             <Label htmlFor="numberOfItems">Aantal</Label>
                             <Input
+                                className="mt-1"
                                 id="numberOfItems"
                                 type="number"
                                 min={0}
@@ -132,8 +135,9 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
 
                         {/* Verpakking */}
                         <div>
-                            <Label htmlFor="packagingProduct">Verpakking</Label>
+                            <Label htmlFor="packagingProduct" className="mb-1">Verpakking</Label>
                             <input
+                                className="mt-1"
                                 type="hidden"
                                 name="packagingProduct"
                                 value={hookForm.getValues('packagingProduct') || ''}
@@ -147,7 +151,8 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectLabel>Verpakking</SelectLabel>
+                                        <SelectLabel                                 className="mt-1"
+                                        >Verpakking</SelectLabel>
                                         {Object.values(PackagingProduct).map((pkg) => (
                                             <SelectItem key={pkg} value={pkg}>
                                                 {pkg.toLowerCase()}
@@ -166,8 +171,9 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
                         {/* Inhoud en eenheid */}
                         <div className="flex gap-4">
                             <div className="flex-1">
-                                <Label htmlFor="volumeContent">Inhoud</Label>
+                                <Label htmlFor="volumeContent" >Inhoud</Label>
                                 <Input
+                                    className="mt-1"
                                     id="volumeContent"
                                     type="number"
                                     {...hookForm.register('volumeContent', { valueAsNumber: true })}
@@ -180,7 +186,7 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
                                 />
                             </div>
                             <div className="flex-1">
-                                <Label htmlFor="unitProduct">Eenheid</Label>
+                                <Label htmlFor="unitProduct" className="mb-1">Eenheid</Label>
                                 <input
                                     type="hidden"
                                     name="unitProduct"
@@ -195,7 +201,9 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
-                                            <SelectLabel>Eenheid</SelectLabel>
+                                            <SelectLabel
+                                                className="mt-1"
+                                            >Eenheid</SelectLabel>
                                             {Object.values(UnitProduct).map((unit) => (
                                                 <SelectItem key={unit} value={unit}>
                                                     {unit.toLowerCase()}
@@ -216,7 +224,7 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
 
                         {/* Categorieën */}
                         <div>
-                            <Label>Categorieën</Label>
+                            <Label className="mb-1">Categorieën</Label>
                             {/* i.p.v. 1 hidden input, maken we er N, met name categoryIds.0, categoryIds.1, … */}
                             {(selectedCategories || []).map((catId, i) => (
                                 <input
