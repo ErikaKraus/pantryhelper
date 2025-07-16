@@ -10,19 +10,19 @@ interface ProductsPageProps {
 export default async function ProductsPage() {
     const profile = await getSessionProfileOrRedirect()
     const products = await getAllProducts(profile.groupId)
-    const categories = await getAllCategories(profile.groupId)
+    const allCategories = await getAllCategories(profile.groupId)
 
     return (
         <div className="w-full p-6">
             <div className="flex justify-between items-center">
                 <h1 className="text-2xl font-bold">Producten</h1>
                 <div className="mb-3">
-                    <AddProductDialog categories={categories} />
+                    <AddProductDialog categories={allCategories} />
                 </div>
             </div>            {products.length === 0 ? (
                 <p>Er zijn nog geen producten.</p>
             ) : (
-                <OverviewProducts products={products} />
+                <OverviewProducts products={products} categories={allCategories} />
             )}
         </div>
     )

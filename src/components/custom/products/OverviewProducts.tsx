@@ -1,6 +1,6 @@
 'use client'
 import {FunctionComponent} from 'react'
-import {Product} from '@prisma/client'
+import {Category, Product} from '@prisma/client'
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/components/ui/table'
 import Link from 'next/link'
 import {Eye} from 'lucide-react'
@@ -9,10 +9,12 @@ import EditProductDialog from '@/components/custom/products/editProductDialog'
 import {Button} from '@/components/ui/button'
 
 interface OverviewProductsProps {
-products: Product[]
+    products: Product[]
+    categories: Category[]
 }
 
-const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products}) => {
+const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products, categories}) => {
+
     return (
         <div className="overflow-x-auto w-full">
 
@@ -38,7 +40,7 @@ const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products}) 
                                     <Eye size={20} />
                                 </Button>
                             </Link>
-                            <EditProductDialog product={product}  />
+                            <EditProductDialog product={product} allCategories={categories}/>
                             <DeleteProductButton productId={product.id}/>
                         </TableCell>
                     </TableRow>

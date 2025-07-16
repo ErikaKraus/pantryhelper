@@ -21,13 +21,15 @@ import {
     SelectValue
 } from '@/components/ui/select'
 import SubmitButtonWithLoading from '@/components/custom/button/submitButtonWithLoading'
+import {Popover, PopoverContent, PopoverTrigger} from '@/components/ui/popover'
+import {Checkbox} from '@/components/ui/checkbox'
 
 interface EditProductDialogProps {
-    product: Product &
-        { categories: Category[] }
+    product: Product & { categories: Category[] }
+    allCategories: Category[]
 }
 
-export default function EditProductDialog ({product}: EditProductDialogProps)  {
+export default function EditProductDialog ({product, allCategories}: EditProductDialogProps)  {
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(false)
     const [actionResult, updateProduct, isPending] = useActionState(Actions.updateProduct, {success: false})
@@ -46,6 +48,11 @@ export default function EditProductDialog ({product}: EditProductDialogProps)  {
             categoryIds: product.categories ? product.categories.map(category => category.id) : [],
         }
     })
+
+    //Use watch to see the current packaging and unit
+    const watchedPackaging = hookForm.watch('packagingProduct') ?? ''
+    const watchedUnit = hookForm.watch('unitProduct') ?? ''
+    const watchedCategories = hookForm.watch('categoryIds') ?? []
 
 
     useEffect(() => {
@@ -72,31 +79,30 @@ export default function EditProductDialog ({product}: EditProductDialogProps)  {
 
                     <div className="space-y-4">
                         <div>
-                            <Label htmlFor="name">Naam</Label>
+                            <Label htmlFor="name" className="mb-1">Naam</Label>
                             <Input id="name" {...hookForm.register('name')}  />
                             <FormError path="name" formErrors={hookForm.formState.errors} serverErrors={actionResult} />
                         </div>
 
                         <div>
-                            <Label htmlFor="brand">Merk</Label>
+                            <Label htmlFor="brand" className="mb-1">Merk</Label>
                             <Input id="brand" {...hookForm.register('brand')}  />
                             <FormError path="brand" formErrors={hookForm.formState.errors} serverErrors={actionResult} />
                         </div>
 
                         <div>
-                            <Label htmlFor="numberOfItems">Aantal</Label>
+                            <Label htmlFor="numberOfItems" className="mb-1">Aantal</Label>
                             <Input id="numberOfItems" {...hookForm.register('numberOfItems')}  />
                             <FormError path="numberOfItems" formErrors={hookForm.formState.errors} serverErrors={actionResult} />
                         </div>
 
                         <div>
-                            <Label htmlFor="packagingProduct">Verpakking</Label>
+                            <Label htmlFor="packagingProduct" className="mb-1">Verpakking</Label>
                             <Select
-                                id="packagingProduct"
-                                value={hookForm.getValues('packagingProduct') ?? ''}
                                 onValueChange={(val) =>
                                     hookForm.setValue('packagingProduct', val as PackagingProduct)
                                 }
+                                value={watchedPackaging}
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Kies verpakking" />
@@ -120,25 +126,24 @@ export default function EditProductDialog ({product}: EditProductDialogProps)  {
                             <input
                                 type="hidden"
                                 name="packagingProduct"
-                                value={hookForm.getValues('packagingProduct') ?? ''}
+                                value={watchedPackaging}
                             />
                         </div>
 
 
                         <div>
-                            <Label>Inhoud</Label>
+                            <Label className="mb-1">Inhoud</Label>
                             <Input id="volumeContent" {...hookForm.register('volumeContent')}  />
                             <FormError path="volumeContent" formErrors={hookForm.formState.errors} serverErrors={actionResult} />
                         </div>
 
                         <div>
-                            <Label htmlFor="unitProduct">Eenheid</Label>
+                            <Label htmlFor="unitProduct" className="mb-1">Eenheid</Label>
                             <Select
-                                id="unitProduct"
-                                value={hookForm.getValues('unitProduct') ?? ''}
                                 onValueChange={(val) =>
                                     hookForm.setValue('unitProduct', val as UnitProduct)
                                 }
+                                value={watchedUnit}
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Kies eenheid" />
@@ -162,7 +167,66 @@ export default function EditProductDialog ({product}: EditProductDialogProps)  {
                             <input
                                 type="hidden"
                                 name="unitProduct"
-                                value={hookForm.getValues('unitProduct') ?? ''}
+                                value={watchedUnit}
+                            />
+                        </div>
+
+                        <div>
+                            <Label>Categorieën</Label>
+
+                            {/* hidden inputs voor FormData */}
+                            {watchedCategories.map((cid, i) => (
+                                <input
+                                    key={i}
+                                    type="hidden"
+                                    name={`categoryIds.${i}`}
+                                    value={cid}
+                                />
+                            ))}
+
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <Button variant="outline" className="w-full justify-between">
+                                        {watchedCategories.length > 0
+                                            ? allCategories
+                                                .filter((c) => watchedCategories.includes(c.id))
+                                                .map((c) => c.name)
+                                                .join(', ')
+                                            : 'Selecteer categorieën'}
+                                    </Button>
+                                </PopoverTrigger>
+
+                                <PopoverContent className="w-64 p-2">
+                                    <div className="max-h-40 overflow-y-auto space-y-1">
+                                        {allCategories.map((c) => {
+                                            const checked = watchedCategories.includes(c.id)
+                                            return (
+                                                <div key={c.id} className="flex items-center">
+                                                    <Checkbox
+                                                        id={`cat-${c.id}`}
+                                                        checked={checked}
+                                                        onCheckedChange={(on) => {
+                                                            const arr = hookForm.getValues('categoryIds') || []
+                                                            hookForm.setValue(
+                                                                'categoryIds',
+                                                                on ? [...arr, c.id] : arr.filter((x) => x !== c.id)
+                                                            )
+                                                        }}
+                                                    />
+                                                    <Label htmlFor={`cat-${c.id}`} className="ml-2">
+                                                        {c.name}
+                                                    </Label>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                </PopoverContent>
+                            </Popover>
+
+                            <FormError
+                                path="categoryIds"
+                                formErrors={hookForm.formState.errors}
+                                serverErrors={actionResult}
                             />
                         </div>
 
