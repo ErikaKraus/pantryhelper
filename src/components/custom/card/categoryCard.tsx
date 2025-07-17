@@ -13,7 +13,7 @@ const CategoryCard: FunctionComponent<CategoryCardProps> = ({title, link}) => {
     return (
         <motion.div whileHover={{scale: 1.05}}>
             <Link href={link}>
-                <Card className="min-h-40 w-45 flex items-center justify-center">
+                <Card className="min-h-40 flex items-center justify-center">
                     <CardTitle className="text-center text-lg sm:text-l md:text-xl lg:text-2xl">
                        {title}
                      </CardTitle>

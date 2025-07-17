@@ -49,7 +49,7 @@ export default function AddCategoryDialog() {
                         <div>
                             <Label htmlFor="name">Naam</Label>
                             <Input
-                                className="mt-3"
+                                className="mt-1"
                                 id="name"
                                 {...hookForm.register('name')}
                                 defaultValue={actionResult?.submittedData?.name ?? ''}

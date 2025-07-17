@@ -57,7 +57,7 @@ export default function  EditCategoryDialog({categoryId, currentName}: EditCateg
                     <DialogTitle>Categorie wijzigen</DialogTitle>
                 </DialogHeader>
 
-                <Form
+                <Form<FormValues>
                     hookForm={hookForm}
                     action={updateCategory}
                     actionResult={actionResult}
