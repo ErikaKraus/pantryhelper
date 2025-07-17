@@ -12,7 +12,7 @@ export default function DeleteShoppinglistProductButton({shoppinglistId, product
         <ActionButton
             action={() => Actions.deleteShoppinglistProduct({shoppinglistId, productId})}
             variant="destructive"
-            pendingContent="Verwijderen"
+            // pendingContent="Verwijderen"
             size='sm'
         >
             <Trash2 size={14} />
