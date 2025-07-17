@@ -6,6 +6,7 @@ import {Badge} from '@/components/ui/badge'
 import {Label} from '@/components/ui/label'
 import {Card, CardContent, CardHeader} from '@/components/ui/card'
 import {Heart} from 'lucide-react'
+import RestockToggle from '@/components/custom/products/restockToggle'
 
 interface DetailProductProps {
 product: Product & {
@@ -76,6 +77,12 @@ export default function DetailProduct({product}: DetailProductProps)  {
                     </div>
                 )}
             </div>
+                <div className="flex items-center space-x-2">
+                    <RestockToggle
+                        productId={product.id}
+                        needsRestockInitial={!!product.needsRestock}
+                    />
+                </div>
             </CardContent>
         </Card>
     )

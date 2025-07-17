@@ -6,6 +6,8 @@ import {revalidatePath} from 'next/cache'
 import DAL from '@dal'
 import {redirect} from 'next/navigation'
 import {PackagingProduct, UnitProduct} from '@prisma/client'
+import { z } from 'zod'
+
 
 export const createProduct = formAction(createProductSchema, async (product, profile) => {
     const duplicateProduct = await DAL.findDuplicatieProduct({
@@ -97,5 +99,16 @@ export const updateProduct = formAction(updateProductSchema, async (product, pro
 export const deleteProduct = serverFunction(deleteProductSchema, async ({id}, profile) => {
     await DAL.deleteProduct(id)
     redirect('/products')
+    }
+)
+
+export const toggleRestock = serverFunction(
+    z.object({
+        id: z.string().uuid(),
+        needsRestock: z.boolean(),
+    }),
+    async ({ id, needsRestock }, profile) => {
+        await DAL.updateProduct(id, { needsRestock })
+        revalidatePath('/products/lowstock')
     }
 )

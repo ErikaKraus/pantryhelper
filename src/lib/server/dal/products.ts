@@ -123,3 +123,23 @@ export async function findDuplicateProductExcludingId(params: FindDuplicateProdu
         },
     })
 }
+
+export async function getLowStockProducts(groupId: string): Promise<ProductWithRels[]> {
+    return prismaClient.product.findMany({
+        where: {
+            groupId,
+            numberOfItems: { lte: 1 },
+        },
+        include: {
+            categories: true,
+            shoppinglistProducts: true,
+            ingredients: true,
+            productEntries: {
+                orderBy: { purchaseDate: 'desc' },
+            },
+            userFavouriteProducts: true,
+        },
+        orderBy: { name: 'asc' },
+    })
+}
+

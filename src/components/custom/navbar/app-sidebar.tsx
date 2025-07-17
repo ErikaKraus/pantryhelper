@@ -36,7 +36,7 @@ const data = {
     },
     {
       title: 'Lage voorraad',
-      url: '/products/needsrestock',
+      url: '/products/lowstock',
       icon: RefreshCcwIcon,
     },
     {

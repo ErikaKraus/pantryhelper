@@ -1,14 +1,31 @@
-import {Button, ButtonProps} from '@/components/ui/button'
-import {FunctionComponent, PropsWithChildren, ReactNode, useTransition} from 'react'
-import {Loader2} from 'lucide-react'
+// import {Button, ButtonProps} from '@/components/ui/button'
+// import {FunctionComponent, PropsWithChildren, ReactNode, useTransition} from 'react'
+// import {Loader2} from 'lucide-react'
+//
+// interface ActionButtonProps extends ButtonProps, PropsWithChildren {
+//     action: () => Promise<void>
+//     pendingContent?: ReactNode
+// }
+'use client'
 
-interface ActionButtonProps extends ButtonProps, PropsWithChildren {
+import { Button } from '@/components/ui/button'
+import type { ComponentProps, PropsWithChildren, ReactNode } from 'react'
+import { useTransition } from 'react'
+import { Loader2 } from 'lucide-react'
+
+interface ActionButtonProps
+    extends ComponentProps<typeof Button>,
+        PropsWithChildren {
     action: () => Promise<void>
     pendingContent?: ReactNode
 }
 
-const ActionButton: FunctionComponent<ActionButtonProps> = ({action, children, pendingContent, ...buttonProps}) => {
-    // De useTransition hook wordt gebruikt om een server function op te roepen (waarna deze een server action genoemd
+export default function ActionButton({
+                                         action,
+                                         children,
+                                         pendingContent,
+                                         ...buttonProps
+                                     }: ActionButtonProps) {    // De useTransition hook wordt gebruikt om een server function op te roepen (waarna deze een server action genoemd
     // wordt). De isPending variabele geeft aan of er een transition bezig is, en de startTransition functie wordt
     // gebruikt om een nieuwe transition te starten.
     // State updates die binnen een transition worden gedaan, worden pas doorgevoerd nadat alle transition afgehandeld
@@ -31,4 +48,3 @@ const ActionButton: FunctionComponent<ActionButtonProps> = ({action, children, p
     )
 }
 
-export default ActionButton

@@ -1,3 +1,4 @@
+'use client'
 import {FunctionComponent, useActionState, useEffect, useState} from 'react'
 import {createShoppinglistProductSchema} from '@schemas'
 import z from 'zod'
