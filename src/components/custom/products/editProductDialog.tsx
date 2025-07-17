@@ -65,7 +65,7 @@ export default function EditProductDialog ({product, allCategories}: EditProduct
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button aria-label="Aankoop bewerken" className="text-gray-500 hover:text-blue-600" size="sm" variant="outline">
+                <Button aria-label="Aankoop bewerken"  size="sm" variant="outline">
                     <SquarePen size={16}/>
                 </Button>
             </DialogTrigger>

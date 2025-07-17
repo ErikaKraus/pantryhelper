@@ -11,7 +11,7 @@ export default function DeleteProductButton({productId}: DeleteProductButtonProp
     return (
         <ActionButton
             action={() => Actions.deleteProduct({id: productId})}
-            variant="destructive"
+            variant="outline"
             pendingContent="Verwijderen"
             size='sm'
         >
