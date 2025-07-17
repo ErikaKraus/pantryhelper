@@ -7,13 +7,15 @@ import {Eye} from 'lucide-react'
 import DeleteProductButton from '@/components/custom/products/deleteProductButton'
 import EditProductDialog from '@/components/custom/products/editProductDialog'
 import {Button} from '@/components/ui/button'
+import AddToShoppinglistProductDialog from '@/components/custom/shoppinglistProducts/addToShoppinglistProductDialog'
 
 interface OverviewProductsProps {
     products: Product[]
     categories: Category[]
+    shoppinglists: { id: string; name: string }[]
 }
 
-const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products, categories}) => {
+const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products, categories, shoppinglists}) => {
 
     return (
         <div className="overflow-x-auto w-full">
@@ -42,6 +44,11 @@ const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products, c
                             </Link>
                             <EditProductDialog product={product} allCategories={categories}/>
                             <DeleteProductButton productId={product.id}/>
+                            <AddToShoppinglistProductDialog
+                                productId={product.id}
+                                shoppinglists={shoppinglists}
+                            />
+
                         </TableCell>
                     </TableRow>
                 ))}

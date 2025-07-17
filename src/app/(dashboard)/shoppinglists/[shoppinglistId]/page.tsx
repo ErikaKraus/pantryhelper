@@ -4,7 +4,6 @@ import {notFound} from 'next/navigation'
 import EditShoppinglistDialog from '@/components/custom/shoppinglists/editShoppinglistDialog'
 import DeleteShoppinglistButton from '@/components/custom/shoppinglists/deleteShoppinglistButton'
 import OverviewShoppinglistProducts from '@/components/custom/shoppinglistProducts/overviewShoppinglistProducts'
-import OverviewProducts from '@/components/custom/products/OverviewProducts'
 
 interface ShoppinglistPageProps {
     params: Promise<{ shoppinglistId: string }>

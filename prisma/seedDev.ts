@@ -129,7 +129,7 @@ export const seedDev = async (prisma: PrismaClient) => {
     //Seed SHOPPINGLIST
     const shoppinglist = await prisma.shoppinglist.create({
         data: {
-            name: 'Testlijstje',
+            name: 'Boodschappenlijstje',
             groupId: group1.id,
         }
     })
