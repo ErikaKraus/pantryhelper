@@ -2,8 +2,8 @@ import {getSessionProfileOrRedirect} from '@mediators'
 import {getCategoryById, getProductsByCategory} from '@dal'
 import {notFound} from 'next/navigation'
 import OverviewProducts from '@/components/custom/products/OverviewProducts'
-import DeleteCategoryButton from '@/components/custom/button/categories/deleteCategoryButton'
-import EditCategoryDialog from '@/components/custom/dialog/editCategoryDialog'
+import DeleteCategoryButton from '@/components/custom/categories/deleteCategoryButton'
+import EditCategoryDialog from '@/components/custom/categories/editCategoryDialog'
 
 interface CategoryPageProps {
     params: Promise<{ categoryId: string }>
@@ -38,7 +38,7 @@ export default async function CategoryPage({params}: CategoryPageProps) {
     {products.length === 0 ? (
                 <p>Er zijn nog geen producten in deze categorie.</p>
             ) : (
-                <OverviewProducts products={products} />
+                <OverviewProducts products={products} categories={[]} />
             )}
         </div>
     )

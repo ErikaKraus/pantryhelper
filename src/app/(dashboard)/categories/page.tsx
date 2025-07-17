@@ -2,7 +2,7 @@ import {FunctionComponent} from 'react'
 import {getSessionProfileOrRedirect} from '@mediators'
 import {getAllCategories} from '@dal'
 import CategoryCard from '@/components/custom/card/categoryCard'
-import AddCategoryDialog from '@/components/custom/dialog/addCategoryDialog'
+import AddCategoryDialog from '@/components/custom/categories/addCategoryDialog'
 
 
 const CategoriesPage: FunctionComponent = async () => {
@@ -22,7 +22,6 @@ const CategoriesPage: FunctionComponent = async () => {
                 <CategoryCard key={category.id} title={category.name} link={`/categories/${category.id}`}  />
             ))}
             </div>
-
         </div>
 
     )
