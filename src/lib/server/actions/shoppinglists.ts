@@ -4,6 +4,7 @@ import {formAction, serverFunction} from '@mediators'
 import {createShoppinglistSchema, deleteShoppinglistSchema, updateShoppinglistSchema} from '@schemas'
 import {revalidatePath} from 'next/cache'
 import DAL from '@dal'
+import {redirect} from 'next/navigation'
 
 export const createShoppingList = formAction(createShoppinglistSchema, async (shoppinglist, profile) => {
     await DAL.createShoppinglist({
@@ -23,4 +24,5 @@ await DAL.updateShoppinglist(shoppinglist.id, {
 export const deleteShoppinglist = serverFunction(deleteShoppinglistSchema, async ({id}, profile) => {
     await DAL.deleteShoppinglist(id)
     revalidatePath('/shoppinglists')
+    redirect('/shoppinglists')
 })
