@@ -1,12 +1,10 @@
-import {FunctionComponent} from 'react'
 import {getSessionProfileOrRedirect} from '@mediators'
-import {getShoppinglistById} from '@dal'
+import {getAllShoppinglistProducts, getShoppinglistById} from '@dal'
 import {notFound} from 'next/navigation'
-import EditCategoryDialog from '@/components/custom/categories/editCategoryDialog'
-import DeleteCategoryButton from '@/components/custom/categories/deleteCategoryButton'
-import OverviewProducts from '@/components/custom/products/OverviewProducts'
 import EditShoppinglistDialog from '@/components/custom/shoppinglists/editShoppinglistDialog'
 import DeleteShoppinglistButton from '@/components/custom/shoppinglists/deleteShoppinglistButton'
+import OverviewShoppinglistProducts from '@/components/custom/shoppinglistProducts/overviewShoppinglistProducts'
+import OverviewProducts from '@/components/custom/products/OverviewProducts'
 
 interface ShoppinglistPageProps {
     params: Promise<{ shoppinglistId: string }>
@@ -21,6 +19,8 @@ export default async function ShoppinglistPage({params}: ShoppinglistPageProps) 
     if (!shoppinglist) {
         return notFound()
     }
+    const items = await getAllShoppinglistProducts(shoppinglistId)
+
     return (
         <div className="w-full p-6">
             <div className="flex w-full items-center justify-between mb-4">
@@ -30,7 +30,11 @@ export default async function ShoppinglistPage({params}: ShoppinglistPageProps) 
                     <DeleteShoppinglistButton shoppinglistId={shoppinglistId} />
                 </div>
             </div>
-
+            {items.length === 0 ? (
+                <p>Er zitten nog geen producten in dit boodschappenlijstje.</p>
+            ) : (
+                <OverviewShoppinglistProducts items={items} shoppinglistId={shoppinglistId} />
+            )}
 
         </div>
     )

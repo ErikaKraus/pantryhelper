@@ -53,13 +53,43 @@ export async function deleteShoppinglistProduct(params: {shoppinglistId: string;
     })
 }
 
-export async function getAllShoppinglistProducts(shoppinglistId: string): Promise<ShoppinglistProduct[]> {
+export async function getAllShoppinglistProducts(shoppinglistId: string): Promise<
+    (ShoppinglistProduct & {
+        product: { id: string; name: string; brand: string; numberOfItems: number }
+    })[]
+> {
     return prismaClient.shoppinglistProduct.findMany({
         where: {
             shoppinglistId,
         },
         orderBy: {
             productId: 'asc',
+        },
+        include: {
+            product: {
+                select: {
+                    id: true,
+                    name: true,
+                    brand: true,
+                    numberOfItems: true,
+                },
+            },
         }
+    })
+}
+
+export async function updateShoppinglistProductQuantity(params: {
+    shoppinglistId: string,
+    productId: string,
+    quantity: number}
+): Promise<ShoppinglistProduct> {
+    return prismaClient.shoppinglistProduct.update({
+        where: {
+            shoppinglistId_productId: {
+                shoppinglistId: params.shoppinglistId,
+                productId: params.productId,
+            },
+        },
+        data: { quantity: params.quantity },
     })
 }

@@ -32,3 +32,4 @@ export const deleteShoppinglistProduct = serverFunction(deleteShoppinglistProduc
     await DAL.deleteShoppinglistProduct({shoppinglistId, productId})
     revalidatePath(`/shoppinglists/${shoppinglistId}`)
 })
+
