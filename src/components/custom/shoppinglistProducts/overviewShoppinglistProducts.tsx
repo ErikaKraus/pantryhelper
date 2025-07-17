@@ -1,5 +1,5 @@
 'use client'
-import {FunctionComponent, useActionState} from 'react'
+import {FunctionComponent, useActionState, useTransition} from 'react'
 import {ShoppinglistProduct} from '@prisma/client'
 import Actions from '@actions'
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/components/ui/table'
@@ -22,7 +22,8 @@ interface OverviewShoppinglistProductsProps {
 }
 
 const OverviewShoppinglistProducts: FunctionComponent<OverviewShoppinglistProductsProps> = ({shoppinglistId, items}) => {
-// actie‑hooks
+    const [isPendingTransition, startTransition] = useTransition()
+
     const [ , updateItem, isUpdating ] = useActionState(
         Actions.updateShoppinglistProduct,
         { success: false }
@@ -31,15 +32,18 @@ const OverviewShoppinglistProducts: FunctionComponent<OverviewShoppinglistProduc
     const adjustQty = (productId: string, newQty: number) => {
         if (newQty < 1) return
 
-        // 1) maak nieuwe FormData
-        const fd = new FormData()
-        fd.set('shoppinglistId', shoppinglistId)
-        fd.set('productId', productId)
-        fd.set('quantity', newQty.toString())
-
-        // 2) dispatch met je FormData
-        updateItem(fd)
+        // NU in een transition:
+        startTransition(() => {
+            const fd = new FormData()
+            fd.set('shoppinglistId', shoppinglistId)
+            fd.set('productId', productId)
+            fd.set('quantity', newQty.toString())
+            updateItem(fd)
+        })
     }
+
+    const busy = isUpdating || isPendingTransition
+
 
     return (
         <Table>
@@ -64,7 +68,7 @@ const OverviewShoppinglistProducts: FunctionComponent<OverviewShoppinglistProduc
                             <Button
                                 size="icon"
                                 variant="outline"
-                                disabled={isUpdating}
+                                disabled={busy}
                                 onClick={() => adjustQty(product.id, quantity - 1)}
                             >
                                 <Minus size={14} />
@@ -73,7 +77,7 @@ const OverviewShoppinglistProducts: FunctionComponent<OverviewShoppinglistProduc
                             <Button
                                 size="icon"
                                 variant="outline"
-                                disabled={isUpdating}
+                                disabled={busy}
                                 onClick={() => adjustQty(product.id, quantity + 1)}
                             >
                                 <Plus size={14} />
