@@ -10,7 +10,8 @@ import { z } from 'zod'
 
 
 export const createProduct = formAction(createProductSchema, async (product, profile) => {
-    const duplicateProduct = await DAL.findDuplicatieProduct({
+    //Check for duplicates
+    const duplicateProduct = await DAL.findDuplicateProduct({
         name: product.name,
         brand: product.brand,
         packagingProduct: product.packagingProduct as PackagingProduct | undefined,
@@ -30,9 +31,16 @@ export const createProduct = formAction(createProductSchema, async (product, pro
         }
     }
 
+    //Threshold and restock flag
+    const threshold    = product.restockThreshold ?? 1
+    const restockFlag  = (product.numberOfItems ?? 0) <= threshold
+
+    //Create with DAL, incl threshold and needsRestock
     const { categoryIds, ...rest } = product
     await DAL.createProduct({
         ...rest,                              // hier zit nu o.a. unitProduct, packaging, isOpen, etc.
+        restockThreshold: product.restockThreshold,
+        needsRestock: restockFlag,
         group: { connect: { id: profile.groupId } },
         categories: categoryIds?.length
             ? { connect: categoryIds.map(id => ({ id })) }
@@ -50,11 +58,12 @@ export const updateProduct = formAction(updateProductSchema, async (product, pro
         volumeContent,
         unitProduct,
         numberOfItems,
-        needsRestock,
+        restockThreshold,
         isOpen,
         categoryIds,
         shoppinglistIds} = product
 
+    //Check for duplicates
     const duplicateProduct = await DAL.findDuplicateProductExcludingId({
         id: product.id,
         name: product.name,
@@ -73,7 +82,12 @@ export const updateProduct = formAction(updateProductSchema, async (product, pro
             submittedData: { ...product },
         }
     }
-    // const { id, categoryIds, ...rest } = product
+
+    //Threshold and restock flag
+    const threshold   = restockThreshold ?? 1
+    const restockFlag = numberOfItems <= threshold
+
+    //Update with DAL, incl restock threshold and needsrestock
     await DAL.updateProduct(id, {
         name,
         brand,
@@ -81,7 +95,8 @@ export const updateProduct = formAction(updateProductSchema, async (product, pro
         volumeContent,
         unitProduct,
         numberOfItems,
-        needsRestock,
+        restockThreshold,
+        needsRestock: restockFlag,
         isOpen,
         group: { connect: { id: profile.groupId } },
         categories: categoryIds
@@ -112,3 +127,4 @@ export const toggleRestock = serverFunction(
         revalidatePath('/products/lowstock')
     }
 )
+

@@ -9,7 +9,7 @@ import { Eye } from 'lucide-react'
 import ActionButton from '@/components/custom/button/actionButton'
 import { toggleRestock } from '@actions'
 import AddToShoppinglistProductDialog from '@/components/custom/shoppinglistProducts/addToShoppinglistProductDialog'
-import LowStockActions from '@/components/custom/products/lowStockActions'
+import DeleteFromLowStockButton from '@/components/custom/products/deleteFromLowStockButton'
 
 export default async function LowStockPage() {
     const profile = await getSessionProfileOrRedirect()
@@ -46,7 +46,7 @@ export default async function LowStockPage() {
                                 </Link>
 
                                 {/* 2) Uit low‑stock lijst halen */}
-                                <LowStockActions productId={p.id} />
+                                <DeleteFromLowStockButton productId={p.id} />
 
 
                                 {/* 3) Toevoegen aan boodschappenlijst */}

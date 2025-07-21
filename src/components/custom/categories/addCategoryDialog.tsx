@@ -34,7 +34,7 @@ export default function AddCategoryDialog() {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="default" size="sm">Categorie toevoegen</Button>
+                <Button variant="default" size="sm">Nieuwe categorie</Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>

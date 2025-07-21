@@ -19,8 +19,15 @@ export const productSchema = z.object({
         .number({invalid_type_error: 'Aantal items moet een getal zijn'})
         .int('Aantal items moet een geheel getal zijn.')
         .nonnegative('Aantal items moet groter zijn dan nul.'),
+    restockThreshold: z.preprocess(
+        (val) => (val === '' || val == null ? undefined : val),
+        z.coerce
+            .number({ invalid_type_error: 'Minimale threshold moet een getal zijn' })
+            .int('Threshold moet een geheel getal zijn')
+            .nonnegative('Threshold mag niet negatief zijn')
+            .optional()
+    ),    isOpen: z.coerce.boolean().optional(),
     needsRestock: z.coerce.boolean().optional(),
-    isOpen: z.coerce.boolean().optional(),
     categoryIds: z.array(z.string().uuid()).optional(),
     shoppinglistIds: z.array(z.string().uuid()).optional(),
     }

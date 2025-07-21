@@ -8,13 +8,12 @@ interface LowStockActionsProps {
     productId: string
 }
 
-export default function LowStockActions({ productId }: LowStockActionsProps) {
+export default function DeleteFromLowStockButton({ productId }: LowStockActionsProps) {
     return (
         <ActionButton
             action={() => toggleRestock({ id: productId, needsRestock: false })}
             variant="outline"
             size="sm"
-            // pendingContent="…Verwijderen"
         >
             <Trash2 size={16}/>
         </ActionButton>
