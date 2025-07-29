@@ -116,9 +116,10 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
                             />
                         </div>
 
-                        {/* Aantal items */}
-                        <div>
-                            <Label htmlFor="numberOfItems">Aantal</Label>
+                        {/* Aantal items en restock threshold */}
+                        <div className="flex gap-4">
+                            <div className="flex-1">
+                                <Label htmlFor="numberOfItems">Aantal</Label>
                             <Input
                                 className="mt-1"
                                 id="numberOfItems"
@@ -131,6 +132,22 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
                                 formErrors={hookForm.formState.errors}
                                 serverErrors={actionResult}
                             />
+                        </div>
+                            <div className="flex-1">
+                                <Label htmlFor="restockThreshold">Restock threshold</Label>
+                                <Input
+                                    className="mt-1"
+                                    id="restockThreshold"
+                                    type="number"
+                                    min={0}
+                                    {...hookForm.register('restockThreshold', { valueAsNumber: true })}
+                                />
+                                <FormError
+                                    path="restockThreshold"
+                                    formErrors={hookForm.formState.errors}
+                                    serverErrors={actionResult}
+                                />
+                            </div>
                         </div>
 
                         {/* Verpakking */}

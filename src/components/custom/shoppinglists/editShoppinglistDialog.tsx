@@ -1,32 +1,47 @@
 'use client'
-import {FunctionComponent, useActionState, useEffect, useState} from 'react'
+
+import {updateShoppinglistSchema} from '@schemas'
+import z from 'zod'
 import {useRouter} from 'next/navigation'
+import {useActionState, useEffect, useState} from 'react'
 import Actions from '@actions'
-import {zodResolver} from '@hookform/resolvers/zod'
-import {useForm} from 'react-hook-form'
-import {createCategorySchema} from '@schemas'
 import {useZodValidatedForm} from '@hooks'
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from '@/components/ui/dialog'
 import {Button} from '@/components/ui/button'
-import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger} from '@/components/ui/dialog'
-import {z} from 'zod'
-import Form from '@/components/custom/form/form'
+import Form from '../form/form'
 import {Input} from '@/components/ui/input'
 import FormError from '@/components/custom/form/formError'
 import SubmitButtonWithLoading from '@/components/custom/button/submitButtonWithLoading'
 import {Label} from '@/components/ui/label'
 
-type CategoryFormValues = z.infer<typeof createCategorySchema>
+type FormValues = z.infer<typeof updateShoppinglistSchema>
 
+interface EditShoppinglistDialogProps {
+    shoppinglistId: string
+    currentName: string
+}
 
-export default function AddCategoryDialog() {
+export default function  EditShoppinglistDialog({shoppinglistId, currentName}: EditShoppinglistDialogProps) {
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(false)
-    const [actionResult, createCategory, isPending] = useActionState(Actions.createCategory, {success: false})
-    const hookForm = useZodValidatedForm(createCategorySchema)
+    const [actionResult, updateShoppinglist, isPending] = useActionState(Actions.updateShoppinglist, {success: false})
+    const hookForm = useZodValidatedForm(updateShoppinglistSchema, {
+        defaultValues: {
+            id: shoppinglistId,
+            name: currentName
+        }
+    })
 
     useEffect(() => {
         if (!isPending && actionResult?.success) {
-            hookForm.reset()
+            hookForm.reset({id: shoppinglistId, name: hookForm.getValues('name')})
             setIsOpen(false)
         }
     }, [isPending, hookForm, actionResult.success])
@@ -34,26 +49,33 @@ export default function AddCategoryDialog() {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="default" size="sm">Categorie toevoegen</Button>
+                <Button variant="default" size="sm">Wijzigen</Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Nieuwe categorie aanmaken</DialogTitle>
+                    <DialogTitle>Boodschappenlijst wijzigen</DialogTitle>
                 </DialogHeader>
-                <Form<CategoryFormValues>
+
+                <Form<FormValues>
                     hookForm={hookForm}
-                    action={createCategory}
+                    action={updateShoppinglist}
                     actionResult={actionResult}
                 >
+                    <input type="hidden" {...hookForm.register('id')} value={shoppinglistId} />
+
                     <div className="space-y-4">
                         <div>
-                            <Label htmlFor="name">Naam</Label>
+                            <Label htmlFor="name" >
+                                Naam
+                            </Label>
                             <Input
-                                className="mt-1"
+                                className="mt-3"
                                 id="name"
                                 {...hookForm.register('name')}
-                                defaultValue={actionResult?.submittedData?.name ?? ''}
-                                placeholder="Bijvoorbeeld 'Groenten', 'Fruit', ..." />
+                                placeholder="Nieuwe naam"
+                                defaultValue={actionResult?.submittedData?.name ?? currentName}
+
+                            />
                             <FormError
                                 path="name"
                                 formErrors={hookForm.formState.errors}
@@ -69,7 +91,7 @@ export default function AddCategoryDialog() {
                             variant="outline"
                             onClick={() => {
                                 setIsOpen(false)
-                                hookForm.reset()
+                                hookForm.reset({id: shoppinglistId, name: currentName})
                             }}>
                             Annuleren
                         </Button>
@@ -78,6 +100,5 @@ export default function AddCategoryDialog() {
             </DialogContent>
         </Dialog>
     )
-
-
 }
+

@@ -3,8 +3,8 @@
 import {ProductEntry} from '@prisma/client'
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/components/ui/table'
 import {Card} from '@/components/ui/card'
-import DeleteProductEntryButton from '@/components/productEntries/deleteProductEntryButton'
-import EditProductEntryDialog from '@/components/productEntries/editProductEntryDialog'
+import DeleteProductEntryButton from '@/components/custom/productEntries/deleteProductEntryButton'
+import EditProductEntryDialog from '@/components/custom/productEntries/editProductEntryDialog'
 
 
 interface PurchaseHistoryProps {

@@ -86,15 +86,31 @@ export async function getAllProducts(groupId: string): Promise<Product[]> {
 }
 
 export async function incrementProductStock(productId: string, amount: number) {
-    return prismaClient.product.update({
-        where: {id: productId},
-        data: {
-            numberOfItems: {increment: amount},
-        }
+    return prismaClient.$transaction(async (tx) => {
+        return prismaClient.$transaction(async (tx) => {
+            // 1) update voorraad
+            const updated = await tx.product.update({
+                where: { id: productId },
+                data: { numberOfItems: { increment: amount } },
+            })
+
+            // 2) lees threshold uit
+            const threshold = updated.restockThreshold ?? 1
+
+            // 3) bepaal flag op basis van threshold i.p.v. vaste 1
+            const restockFlag = updated.numberOfItems <= threshold
+
+            await tx.product.update({
+                where: { id: productId },
+                data: { needsRestock: restockFlag },
+            })
+
+            return updated
+        })
     })
 }
 
-export async function findDuplicatieProduct(params: FindDuplicateProductParams): Promise<Product | null> {
+export async function findDuplicateProduct(params: FindDuplicateProductParams): Promise<Product | null> {
     const {name, brand, packagingProduct, volumeContent, unitProduct, groupId} = params
     return prismaClient.product.findFirst({
         where: {
@@ -123,3 +139,23 @@ export async function findDuplicateProductExcludingId(params: FindDuplicateProdu
         },
     })
 }
+
+export async function getLowStockProducts(groupId: string): Promise<ProductWithRels[]> {
+    return prismaClient.product.findMany({
+        where: {
+            groupId,
+            needsRestock: true,
+        },
+        include: {
+            categories: true,
+            shoppinglistProducts: true,
+            ingredients: true,
+            productEntries: {
+                orderBy: { purchaseDate: 'desc' },
+            },
+            userFavouriteProducts: true,
+        },
+        orderBy: { name: 'asc' },
+    })
+}
+

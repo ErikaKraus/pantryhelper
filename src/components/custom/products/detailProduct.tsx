@@ -6,6 +6,9 @@ import {Badge} from '@/components/ui/badge'
 import {Label} from '@/components/ui/label'
 import {Card, CardContent, CardHeader} from '@/components/ui/card'
 import {Heart} from 'lucide-react'
+import RestockToggle from '@/components/custom/products/restockToggle'
+import EditProductDialog from '@/components/custom/products/editProductDialog'
+import DeleteProductButton from '@/components/custom/products/deleteProductButton'
 
 interface DetailProductProps {
 product: Product & {
@@ -17,6 +20,10 @@ export default function DetailProduct({product}: DetailProductProps)  {
     const {name, brand, numberOfItems, volumeContent, unitProduct, packagingProduct, categories, isOpen, userFavourite} = product
 
     return (
+        <div className="overflow-x-auto w-full">
+
+
+
         <Card className="w-full">
             <CardHeader>
                 <div className="flex w-full items-center justify-between">
@@ -28,11 +35,16 @@ export default function DetailProduct({product}: DetailProductProps)  {
                                 {numberOfItems === 1 ? 'stuk' : 'stuks'})
                             </span>)}
                     </h1>
+
+                    <div className="flex items-center justify-between">
                         <Heart
                             className={`h-6 w-6 cursor-pointer transition-colors ${
                                 userFavourite ? 'text-black' : 'text-gray-400'
                             }`}
                         />
+                        <EditProductDialog product={product} allCategories={categories}/>
+                        <DeleteProductButton productId={product.id}/>
+                    </div>
                 </div>
             </CardHeader>
             <CardContent>
@@ -70,14 +82,23 @@ export default function DetailProduct({product}: DetailProductProps)  {
             {/* Checkboxes */}
             <div className="flex items-center space-x-6 mt-3">
                 {numberOfItems === 1 && (
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center w-20 space-x-2">
                         <Label htmlFor="isOpen" className="font-semibold">Geopend?</Label>
                         <Checkbox id="isOpen" defaultChecked={!!isOpen} disabled />
                     </div>
+
                 )}
             </div>
+                <div className="flex items-center space-x-2 mt-3">
+                    <RestockToggle
+                        productId={product.id}
+                        needsRestockInitial={!!product.needsRestock}
+                    />
+                    <div>(minimale voorraad: {product.restockThreshold})</div>
+                </div>
             </CardContent>
         </Card>
+        </div>
     )
 }
 

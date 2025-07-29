@@ -7,13 +7,15 @@ import {Eye} from 'lucide-react'
 import DeleteProductButton from '@/components/custom/products/deleteProductButton'
 import EditProductDialog from '@/components/custom/products/editProductDialog'
 import {Button} from '@/components/ui/button'
+import AddToShoppinglistProductDialog from '@/components/custom/shoppinglistProducts/addToShoppinglistProductDialog'
 
 interface OverviewProductsProps {
     products: Product[]
     categories: Category[]
+    shoppinglists: { id: string; name: string }[]
 }
 
-const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products, categories}) => {
+const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products, categories, shoppinglists}) => {
 
     return (
         <div className="overflow-x-auto w-full">
@@ -35,13 +37,18 @@ const OverviewProducts: FunctionComponent<OverviewProductsProps> = ({products, c
                         <TableCell>{product.numberOfItems}</TableCell>
                         <TableCell className="flex gap-2" >
                             <Link href={`/products/${product.id}`}>
-                                <Button className="text-gray-600 hover:text-gray-800" title="Bekijk" size="sm"   variant="outline"
+                                <Button className="text-gray-600 hover:text-gray-800"  size="sm"   variant="outline"
                                 >
                                     <Eye size={20} />
                                 </Button>
                             </Link>
                             <EditProductDialog product={product} allCategories={categories}/>
                             <DeleteProductButton productId={product.id}/>
+                            <AddToShoppinglistProductDialog
+                                productId={product.id}
+                                shoppinglists={shoppinglists}
+                            />
+
                         </TableCell>
                     </TableRow>
                 ))}
