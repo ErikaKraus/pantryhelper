@@ -34,12 +34,13 @@ export default function RestockToggle({
 
     return (
         <div className="flex items-center space-x-2">
+            <Label>Restock?</Label>
             <Checkbox
                 checked={checked}
                 onCheckedChange={onChange}
                 disabled={isPending}
             />
-            <Label>Restock</Label>
+
         </div>
     )
 }

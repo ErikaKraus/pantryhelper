@@ -71,17 +71,18 @@ export default function DetailProduct({product}: DetailProductProps)  {
             {/* Checkboxes */}
             <div className="flex items-center space-x-6 mt-3">
                 {numberOfItems === 1 && (
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center w-20 space-x-2">
                         <Label htmlFor="isOpen" className="font-semibold">Geopend?</Label>
                         <Checkbox id="isOpen" defaultChecked={!!isOpen} disabled />
                     </div>
                 )}
             </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 mt-3">
                     <RestockToggle
                         productId={product.id}
                         needsRestockInitial={!!product.needsRestock}
                     />
+                    <div>(min: {product.restockThreshold})</div>
                 </div>
             </CardContent>
         </Card>
