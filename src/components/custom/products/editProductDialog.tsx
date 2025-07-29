@@ -43,6 +43,7 @@ export default function EditProductDialog ({product, allCategories}: EditProduct
             volumeContent: product.volumeContent ?? undefined,
             unitProduct: product.unitProduct ?? undefined,
             numberOfItems: product.numberOfItems,
+            restockThreshold: product.restockThreshold ?? 0,
             needsRestock: product.needsRestock ?? false,
             isOpen: product.isOpen ?? false,
             categoryIds: product.categories ? product.categories.map(category => category.id) : [],
@@ -94,6 +95,12 @@ export default function EditProductDialog ({product, allCategories}: EditProduct
                             <Label htmlFor="numberOfItems" className="mb-1">Aantal</Label>
                             <Input id="numberOfItems" {...hookForm.register('numberOfItems')}  />
                             <FormError path="numberOfItems" formErrors={hookForm.formState.errors} serverErrors={actionResult} />
+                        </div>
+
+                        <div>
+                            <Label htmlFor="restockThreshold" className="mb-1">Minimale voorraad</Label>
+                            <Input id="restockThreshold" {...hookForm.register('restockThreshold')}  />
+                            <FormError path="restockThreshold" formErrors={hookForm.formState.errors} serverErrors={actionResult} />
                         </div>
 
                         <div>
