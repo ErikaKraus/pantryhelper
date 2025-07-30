@@ -16,12 +16,12 @@ export default async function ProductPage({params}: { params: { productId: strin
         )
     }
 
-    const userFavourite = product.userFavouriteProducts.some(u => u.userId === profile.id)
+    const initialFavourite = product.userFavouriteProducts.some(u => u.userId === profile.id)
 
     return (
         <div>
             <div className="flex items-center justify-between mb-4">
-                <DetailProduct product={product} userFavourite={userFavourite}                />
+                <DetailProduct product={product} initialFavourite={initialFavourite}                />
             </div>
             <div>
                 <AddProductPurchase productId={product.id} />

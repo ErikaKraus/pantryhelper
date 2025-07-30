@@ -16,20 +16,20 @@ interface DetailProductProps {
 product: Product & {
     categories: Category[]
     userFavourite: boolean
-}}
+}
+initialFavourite: boolean
+}
 
-export default function DetailProduct({product}: DetailProductProps)  {
-    const {name, brand, numberOfItems, volumeContent, unitProduct, packagingProduct, categories, isOpen, userFavourite:initialFav} = product
-    const [isFav, setIsFav] = useState(initialFav)
+export default function DetailProduct({product, initialFavourite}: DetailProductProps)  {
+    const {name, brand, numberOfItems, volumeContent, unitProduct, packagingProduct, categories, isOpen} = product
+    const [isFav, setIsFav] = useState(initialFavourite)
     const [isPending, startTransition] = useTransition()
-    const [, toggleFavourite] = useActionState(Actions.createUserFavouriteProduct, {success: false})
-    useEffect(() => {
-
-    }, [])
-    const onToggle = () => {
+    const toggle = Actions.toggleFavourite
+    const onClick = () => {
         startTransition(() => {
-            toggleFavourite({productId: product.id})
-            setIsFav(f=>!f)
+            toggle({ productId: product.id })
+            // optimistisch togglen
+            setIsFav(f => !f)
         })
     }
 
@@ -45,7 +45,7 @@ export default function DetailProduct({product}: DetailProductProps)  {
                 <div className="flex w-full items-center justify-between">
                     <h1 className="text-3xl font-bold">
                         <button
-                            onClick={onToggle}
+                            onClick={onClick}
                             disabled={isPending}
                             className="mr-3"
                             aria-label={isFav ? 'Verwijder uit favorieten' : 'Voeg toe aan favorieten'}
