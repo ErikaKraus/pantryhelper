@@ -51,7 +51,6 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
             packagingProduct: undefined,
             volumeContent: undefined,
             unitProduct: undefined,
-            numberOfItems: 1,
             needsRestock: false,
             isOpen: false,
             categoryIds: [],
@@ -114,40 +113,6 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
                                 formErrors={hookForm.formState.errors}
                                 serverErrors={actionResult}
                             />
-                        </div>
-
-                        {/* Aantal items en restock threshold */}
-                        <div className="flex gap-4">
-                            <div className="flex-1">
-                                <Label htmlFor="numberOfItems">Aantal</Label>
-                            <Input
-                                className="mt-1"
-                                id="numberOfItems"
-                                type="number"
-                                min={0}
-                                {...hookForm.register('numberOfItems', { valueAsNumber: true })}
-                            />
-                            <FormError
-                                path="numberOfItems"
-                                formErrors={hookForm.formState.errors}
-                                serverErrors={actionResult}
-                            />
-                        </div>
-                            <div className="flex-1">
-                                <Label htmlFor="restockThreshold">Restock threshold</Label>
-                                <Input
-                                    className="mt-1"
-                                    id="restockThreshold"
-                                    type="number"
-                                    min={0}
-                                    {...hookForm.register('restockThreshold', { valueAsNumber: true })}
-                                />
-                                <FormError
-                                    path="restockThreshold"
-                                    formErrors={hookForm.formState.errors}
-                                    serverErrors={actionResult}
-                                />
-                            </div>
                         </div>
 
                         {/* Verpakking */}

@@ -1,4 +1,4 @@
-import { ProductEntry} from '@prisma/client'
+import {Product, ProductEntry} from '@prisma/client'
 import 'server-only'
 import {prismaClient} from '@/lib/server/dal/prismaClient'
 
@@ -62,3 +62,34 @@ export async function getAllProductEntries(productId: string): Promise<ProductEn
     })
 }
 
+export async function getShortExpiryProductEntries(groupId: string, daysAhead = 30): Promise<
+    Array<
+        ProductEntry & {
+        product: { id: string; name: string; brand: string; numberOfItems: number }
+    }>
+> {
+    const now = new Date()
+    const threshold = new Date(now.getTime() + daysAhead * 24 * 60 * 60 * 1000)
+    return prismaClient.productEntry.findMany({
+        where: {
+            product: {groupId},
+            // alleen producten met een expiryDate ≤ threshold
+            expiryDate: {
+                not: null,
+                lte: threshold,
+            },
+        },
+        include: {
+            product: {
+                select: {
+                    id: true,
+                    name: true,
+                    brand: true,
+                    numberOfItems: true,
+                },
+            },
+        },
+        orderBy: { expiryDate: 'asc' },
+        distinct: ['productId'],
+    })
+}

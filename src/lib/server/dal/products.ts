@@ -159,22 +159,5 @@ export async function getLowStockProducts(groupId: string): Promise<ProductWithR
     })
 }
 
-export async function getShortExpiryProducts(groupId: string, daysAhead = 30): Promise<Product[]> {
-    const now = new Date()
-    const threshold = new Date(now.getTime() + daysAhead * 24 * 60 * 60 * 1000)
-    return prismaClient.product.findMany({
-        where: {
-            groupId,
-            // alleen producten met een expiryDate ≤ threshold
-            expiryDate: {
-                lte: threshold,
-            },
-        },
-        include: {
-            categories: true,
-            group: true,
-        },
-        orderBy: { expiryDate: 'asc' },
-    })
-}
+
 

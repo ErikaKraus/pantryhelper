@@ -26,13 +26,14 @@ export const productSchema = z.object({
             .int('Threshold moet een geheel getal zijn')
             .nonnegative('Threshold mag niet negatief zijn')
             .optional()
-    ),    isOpen: z.coerce.boolean().optional(),
+    ),
+    isOpen: z.coerce.boolean().optional(),
     needsRestock: z.coerce.boolean().optional(),
     categoryIds: z.array(z.string().uuid()).optional(),
     shoppinglistIds: z.array(z.string().uuid()).optional(),
     }
 )
 
-export const createProductSchema = productSchema.omit({id: true})
+export const createProductSchema = productSchema.omit({id: true, numberOfItems: true, restockThreshold: true})
 export const updateProductSchema = productSchema
 export const deleteProductSchema = z.object({id: z.string().uuid()})

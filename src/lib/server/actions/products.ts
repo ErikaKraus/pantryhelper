@@ -30,20 +30,23 @@ export const createProduct = formAction(createProductSchema, async (product, pro
             },
         }
     }
-
     //Threshold and restock flag
-    const threshold    = product.restockThreshold ?? 1
-    const restockFlag  = (product.numberOfItems ?? 0) <= threshold
+    const threshold    = 1
+    const restockFlag  = false
 
     //Create with DAL, incl threshold and needsRestock
-    const { categoryIds, ...rest } = product
+    // const { categoryIds, ...rest } = product
     await DAL.createProduct({
-        ...rest,                              // hier zit nu o.a. unitProduct, packaging, isOpen, etc.
-        restockThreshold: product.restockThreshold,
-        needsRestock: restockFlag,
-        group: { connect: { id: profile.groupId } },
-        categories: categoryIds?.length
-            ? { connect: categoryIds.map(id => ({ id })) }
+        name:            product.name,
+        brand:           product.brand,
+        packagingProduct: product.packagingProduct,
+        volumeContent:    product.volumeContent,
+        unitProduct:      product.unitProduct,
+        restockThreshold: threshold,
+        needsRestock:     restockFlag,
+        group:            { connect: { id: profile.groupId } },
+        categories:       product.categoryIds?.length
+            ? { connect: product.categoryIds.map(id => ({ id })) }
             : undefined,
     })
     revalidatePath('/products')
