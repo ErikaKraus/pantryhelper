@@ -73,7 +73,7 @@ export async function getProductById(id: string, groupId: string): Promise<Produ
     })
 }
 
-export async function getAllProducts(groupId: string): Promise<Product[]> {
+export async function getAllProducts(groupId: string): Promise<(Product & { categories: Category[] })[]> {
     return prismaClient.product.findMany({
         where: {group: {id: groupId}},
         include: {

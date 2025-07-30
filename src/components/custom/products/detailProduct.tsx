@@ -9,15 +9,31 @@ import {Heart} from 'lucide-react'
 import RestockToggle from '@/components/custom/products/restockToggle'
 import EditProductDialog from '@/components/custom/products/editProductDialog'
 import DeleteProductButton from '@/components/custom/products/deleteProductButton'
+import {useActionState, useEffect, useState, useTransition} from "react";
+import Actions from "@actions";
 
 interface DetailProductProps {
 product: Product & {
     categories: Category[]
     userFavourite: boolean
-}}
+}
+initialFavourite: boolean
+}
 
-export default function DetailProduct({product}: DetailProductProps)  {
-    const {name, brand, numberOfItems, volumeContent, unitProduct, packagingProduct, categories, isOpen, userFavourite} = product
+export default function DetailProduct({product, initialFavourite}: DetailProductProps)  {
+    const {name, brand, numberOfItems, volumeContent, unitProduct, packagingProduct, categories, isOpen} = product
+    const [isFav, setIsFav] = useState(initialFavourite)
+    const [isPending, startTransition] = useTransition()
+    const toggle = Actions.toggleFavourite
+    const onClick = () => {
+        startTransition(() => {
+            toggle({ productId: product.id })
+            // optimistisch togglen
+            setIsFav(f => !f)
+        })
+    }
+
+
 
     return (
         <div className="overflow-x-auto w-full">
@@ -28,6 +44,16 @@ export default function DetailProduct({product}: DetailProductProps)  {
             <CardHeader>
                 <div className="flex w-full items-center justify-between">
                     <h1 className="text-3xl font-bold">
+                        <button
+                            onClick={onClick}
+                            disabled={isPending}
+                            className="mr-3"
+                            aria-label={isFav ? 'Verwijder uit favorieten' : 'Voeg toe aan favorieten'}
+                        >
+                            {isFav
+                                ? <Heart className="text-red-500" fill="red" size={24} />
+                                : <Heart  className="text-gray-400" size={24} />}
+                        </button>
                         {name}{' '}
                         {numberOfItems > 0 && (
                             <span className="text-xl font-normal text-muted-foreground">
@@ -37,11 +63,12 @@ export default function DetailProduct({product}: DetailProductProps)  {
                     </h1>
 
                     <div className="flex items-center justify-between">
-                        <Heart
-                            className={`h-6 w-6 cursor-pointer transition-colors ${
-                                userFavourite ? 'text-black' : 'text-gray-400'
-                            }`}
-                        />
+                        {/*<Heart*/}
+                        {/*    className={`h-6 w-6 cursor-pointer transition-colors ${*/}
+                        {/*        userFavourite ? 'text-black' : 'text-gray-400'*/}
+                        {/*    }`}*/}
+                        {/*/>*/}
+
                         <EditProductDialog product={product} allCategories={categories}/>
                         <DeleteProductButton productId={product.id}/>
                     </div>
