@@ -20,7 +20,6 @@ export const toggleFavourite = serverFunction(
                 productId,
             })
         }
-
         // 3) Revalidate detail productpage so client fetches again
         revalidatePath(`/products/${productId}`)
         revalidatePath('/products')

@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import {Apple, CookingPotIcon, RefreshCcwIcon, ShoppingCartIcon, Tags} from 'lucide-react'
+import {Apple, CircleAlert, CookingPotIcon, RefreshCcwIcon, ShoppingCartIcon, Tags} from 'lucide-react'
 import {NavMain} from '@/components/custom/navbar/nav-main'
 import {NavUser} from '@/components/custom/navbar/nav-user'
 import {
@@ -38,6 +38,11 @@ const data = {
       title: 'Lage voorraad',
       url: '/products/lowstock',
       icon: RefreshCcwIcon,
+    },
+    {
+      title: 'Korte THT',
+      url: '/products/short-expiry',
+      icon: CircleAlert,
     },
     {
       title: 'Categorieën',
