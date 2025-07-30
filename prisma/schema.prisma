@@ -165,7 +165,7 @@ model UserFavouriteProduct {
   userId    String  @db.Uuid
   user      User    @relation(fields: [userId], references: [id])
   productId String  @db.Uuid
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@unique([userId, productId])
 }
