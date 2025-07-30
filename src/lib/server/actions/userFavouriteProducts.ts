@@ -6,12 +6,23 @@ import DAL from '@dal'
 import {revalidatePath} from 'next/cache'
 
 export const createUserFavouriteProduct = formAction(createUserFavouriteProductSchema, async ({productId}, profile) => {
-    await DAL.createUserFavouriteProduct({
-        userId: profile.id,
-        productId: productId,
-        })
-    revalidatePath('/products')
-})
+        const existing = await DAL.getUserFavouriteProductById(profile.id, productId)
+
+        if (existing) {
+            // Check if favourite product exists already
+            await DAL.deleteUserFavouriteProduct(profile.id, productId)
+        } else {
+            // Create favourite product if non-existent
+            await DAL.createUserFavouriteProduct({
+                userId: profile.id,
+                productId,
+            })
+        }
+
+        // 3) Revalidate detail productpage so client fetches again
+        revalidatePath(`/products/${productId}`)
+    }
+)
 
 export const deleteUserFavouriteProduct = serverFunction(deleteUserFavouriteProductSchema, async ({productId}, profile) => {
     await DAL.deleteUserFavouriteProduct(profile.id, productId)

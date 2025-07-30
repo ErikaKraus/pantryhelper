@@ -16,16 +16,12 @@ export default async function ProductPage({params}: { params: { productId: strin
         )
     }
 
-// Bepaal of deze user dit product als favoriet heeft
-    const userFavourite = product.userFavouriteProducts.some(
-        (uf) => uf.userId === profile.id
-    )
+    const userFavourite = product.userFavouriteProducts.some(u => u.userId === profile.id)
+
     return (
         <div>
             <div className="flex items-center justify-between mb-4">
-                <DetailProduct
-                    product={{ ...product, userFavourite }}
-                />
+                <DetailProduct product={product} userFavourite={userFavourite}                />
             </div>
             <div>
                 <AddProductPurchase productId={product.id} />
