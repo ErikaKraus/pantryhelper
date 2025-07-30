@@ -115,6 +115,8 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
                             />
                         </div>
 
+
+
                         {/* Verpakking */}
                         <div>
                             <Label htmlFor="packagingProduct" className="mb-1">Verpakking</Label>
@@ -160,7 +162,7 @@ export default function AddProductDialog ({categories}: AddProductDialogProps)  
                                     id="volumeContent"
                                     type="number"
                                     {...hookForm.register('volumeContent') }
-                                    placeholder="Aantal"
+                                    placeholder="Inhoud"
                                 />
                                 <FormError
                                     path="volumeContent"

@@ -31,6 +31,7 @@ export const createProduct = formAction(createProductSchema, async (product, pro
         }
     }
     //Threshold and restock flag
+    const initialStock = 0
     const threshold    = 1
     const restockFlag  = false
 
@@ -42,6 +43,7 @@ export const createProduct = formAction(createProductSchema, async (product, pro
         packagingProduct: product.packagingProduct,
         volumeContent:    product.volumeContent,
         unitProduct:      product.unitProduct,
+        numberOfItems: initialStock,
         restockThreshold: threshold,
         needsRestock:     restockFlag,
         group:            { connect: { id: profile.groupId } },
