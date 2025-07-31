@@ -55,11 +55,13 @@ export default function DetailProduct({product, initialFavourite}: DetailProduct
                                 : <Heart  className="text-gray-400" size={24} />}
                         </button>
                         {name}{' '}
-                        {numberOfItems > 0 && (
+                        {numberOfItems > 0 ? (
                             <span className="text-xl font-normal text-muted-foreground">
                                 ({numberOfItems}{' '}
-                                {numberOfItems === 1 ? 'stuk' : 'stuks'})
-                            </span>)}
+                                {numberOfItems === 1 ? 'stuk' : 'stuks'}
+                            </span>) :(
+                            <span className="text-xl font-normal text-destructive">(geen voorraad meer)</span>
+                        ) }
                     </h1>
 
                     <div className="flex items-center justify-between">

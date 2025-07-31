@@ -12,7 +12,7 @@ export default async function ShortExpiryPage() {
 
     return (
         <div className="w-full p-6">
-            <h1 className="text-2xl font-bold mb-4">Korte THT</h1>
+            <h1 className="text-2xl font-bold mb-4">Producten met korte THT</h1>
             {entries.length === 0 ? (
                 <p>Er zijn geen producten met korte THT.</p>
             ) : (
