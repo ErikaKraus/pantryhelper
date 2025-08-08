@@ -4,14 +4,16 @@ import {prismaClient} from '@/lib/server/dal/prismaClient'
 
 export type CreateProductEntryParams = {
     productId: string,
-    quantity: number,
+    boughtQuantity: number,
+    remainingQuantity: number,
     purchaseDate?: Date | string | null,
     expiryDate?: Date | string | null,
 }
 
 export type UpdateProductEntryParams = {
     id: string
-    quantity?: number
+    boughtQuantity?: number,
+    remainingQuantity?: number,
     purchaseDate?: Date | string | null,
     expiryDate?: Date | string | null,
 }
@@ -20,7 +22,8 @@ export async function createProductEntry(params: CreateProductEntryParams): Prom
     return prismaClient.productEntry.create({
         data: {
             product: {connect: {id: params.productId}},
-            quantity: params.quantity,
+            boughtQuantity: params.boughtQuantity,
+            remainingQuantity: params.remainingQuantity,
             purchaseDate: params.purchaseDate ? new Date(params.purchaseDate) : undefined,
             expiryDate: params.expiryDate ? new Date(params.expiryDate) : undefined,
         }
@@ -32,19 +35,20 @@ export async function updateProductEntry(params: UpdateProductEntryParams): Prom
     return prismaClient.productEntry.update({
         where: {id},
         data: {
-            ...('quantity' in data && { quantity: data.quantity }),
+            ...('boughtQuantity' in data && { boughtQuantity: data.boughtQuantity }),
+            ...('remainingQuantity' in data && { remainingQuantity: data.remainingQuantity }),
             ...('purchaseDate' in data && { purchaseDate: data.purchaseDate ? new Date(data.purchaseDate) : null }),
             ...('expiryDate' in data && { expiryDate: data.expiryDate ? new Date(data.expiryDate) : null }),
         }
     })
 }
 
-export async function deleteProductEntry(id: string): Promise<{ productId: string; quantity: number }> {
+export async function deleteProductEntry(id: string): Promise<{ productId: string; remainingQuantity: number }> {
     return await prismaClient.productEntry.delete({
         where: {id},
         select: {
             productId: true,
-            quantity: true
+            remainingQuantity: true
         }
     })
 }
@@ -92,4 +96,13 @@ export async function getShortExpiryProductEntries(groupId: string, daysAhead = 
         orderBy: { expiryDate: 'asc' },
         distinct: ['productId'],
     })
+}
+
+export async function updateProductEntryRemainingQuantity(id: string, newValue: number) {
+    return prismaClient.productEntry.update({
+        where: { id },
+        data: { remainingQuantity: newValue },
+        select: { productId: true },
+    })
+
 }

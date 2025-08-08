@@ -159,5 +159,17 @@ export async function getLowStockProducts(groupId: string): Promise<ProductWithR
     })
 }
 
+export async function recalculateProductStock(productId: string) {
+    const { _sum } = await prismaClient.productEntry.aggregate({
+        where: { productId },
+        _sum: { remainingQuantity: true },
+    })
 
+    await prismaClient.product.update({
+        where: { id: productId },
+        data: {
+            numberOfItems: _sum.remainingQuantity ?? 0,
+        },
+    })
+}
 
