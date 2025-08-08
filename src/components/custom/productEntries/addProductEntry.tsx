@@ -19,7 +19,7 @@ interface AddProductPurchaseProps {
     productId: string
 }
 
-export default function AddProductPurchase({productId}: AddProductPurchaseProps)  {
+export default function AddProductEntry({productId}: AddProductPurchaseProps)  {
     const router = useRouter()
     const [actionResult, createProductEntry, isPending] = useActionState(Actions.createProductEntry, {success: false})
     const today = new Date()
@@ -27,7 +27,8 @@ export default function AddProductPurchase({productId}: AddProductPurchaseProps)
     const hookForm = useZodValidatedForm(createProductEntrySchema, {
         defaultValues: {
             productId,
-            quantity: 1,
+            boughtQuantity: 1,
+            remainingQuantity: 1,
             purchaseDate: today,
             expiryDate: today,
         }
@@ -39,6 +40,16 @@ export default function AddProductPurchase({productId}: AddProductPurchaseProps)
         }
     }, [isPending, hookForm, actionResult.success])
 
+    useEffect(() => {
+        const subscription = hookForm.watch((value, { name }) => {
+            if (name === 'boughtQuantity' && typeof value.boughtQuantity === 'number') {
+                hookForm.setValue('remainingQuantity', value.boughtQuantity)
+            }
+        })
+        return () => subscription.unsubscribe()
+    }, [hookForm])
+
+
     return (
         <Card>
             <Form<FormValues> hookForm={hookForm} action={createProductEntry} actionResult={actionResult}>
@@ -49,19 +60,20 @@ export default function AddProductPurchase({productId}: AddProductPurchaseProps)
                 <div className="grid grid-cols-3 gap-4">
                 <input type="hidden" {...hookForm.register('productId')} />
                 <div className="flex flex-col">
-                    <Label htmlFor="quantity">Aantal</Label>
+                    <Label htmlFor="boughtQuantity">Aantal</Label>
                     <Input className="mt-1"
-                        id="quantity"
+                        id="boughtQuantity"
                         type="number"
                         min={1}
-                        {...hookForm.register('quantity', {valueAsNumber: true})}
-                        defaultValue={actionResult?.submittedData?.quantity ?? 1}
+                        {...hookForm.register('boughtQuantity', {valueAsNumber: true})}
+                        defaultValue={actionResult?.submittedData?.boughtQuantity ?? 1}
                     />
                     <FormError
-                        path="quantity"
+                        path="boughtQuantity"
                         formErrors={hookForm.formState.errors}
                         serverErrors={actionResult}/>
                 </div>
+                    <input type="hidden" {...hookForm.register('remainingQuantity', { valueAsNumber: true })} />
                     <div className="flex flex-col">
                     <Label htmlFor="purchaseDate">Aankoopdatum</Label>
                     <Input className="mt-1"
