@@ -38,7 +38,8 @@ export default function EditProductEntryDialog ({productEntry, productId}: EditP
         defaultValues: {
             id: productEntry.id,
             productId,
-            quantity: productEntry.quantity,
+            boughtQuantity: productEntry.boughtQuantity,
+            remainingQuantity: productEntry.remainingQuantity,
             purchaseDate: productEntry.purchaseDate ? productEntry.purchaseDate : undefined,
             expiryDate: productEntry.expiryDate ? productEntry.expiryDate : undefined,
         }
@@ -68,20 +69,37 @@ export default function EditProductEntryDialog ({productEntry, productId}: EditP
                     action={updateProductEntry}
                     actionResult={actionResult}
                 >
-                    <div className="grid grid-cols-3 gap-4">
-                        {/* Quantity */}
+                    <div className="grid grid-cols-2 gap-4">
+                        {/* boughtQuantity */}
                         <div className="flex flex-col">
-                            <label htmlFor="quantity" className="mb-1 font-medium">
-                                Aantal
+                            <label htmlFor="boughtQuantity" className="mb-1 font-medium">
+                                Gekocht
                             </label>
                             <Input
-                                id="quantity"
+                                id="boughtQuantity"
                                 type="number"
                                 min={1}
-                                {...hookForm.register('quantity', { valueAsNumber: true })}
+                                {...hookForm.register('boughtQuantity', { valueAsNumber: true })}
                             />
                             <FormError
-                                path="quantity"
+                                path="boughtQuantity"
+                                formErrors={hookForm.formState.errors}
+                                serverErrors={actionResult}
+                            />
+                        </div>
+                        {/* remainingQuantity */}
+                        <div className="flex flex-col">
+                            <label htmlFor="remainingQuantity" className="mb-1 font-medium">
+                                Resterend
+                            </label>
+                            <Input
+                                id="remainingQuantity"
+                                type="number"
+                                min={1}
+                                {...hookForm.register('remainingQuantity', { valueAsNumber: true })}
+                            />
+                            <FormError
+                                path="remainingQuantity"
                                 formErrors={hookForm.formState.errors}
                                 serverErrors={actionResult}
                             />
