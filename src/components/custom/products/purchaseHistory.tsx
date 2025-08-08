@@ -5,7 +5,7 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/c
 import {Card} from '@/components/ui/card'
 import DeleteProductEntryButton from '@/components/custom/productEntries/deleteProductEntryButton'
 import EditProductEntryDialog from '@/components/custom/productEntries/editProductEntryDialog'
-import {useTransition} from "react";
+import {useState, useTransition} from "react";
 import {updateRemainingQuantity} from "@actions";
 import {Button} from "@/components/ui/button";
 
@@ -16,6 +16,9 @@ interface PurchaseHistoryProps {
 
 export default function PurchaseHistory({productEntries}: PurchaseHistoryProps) {
     const [isPending, startTransition] = useTransition()
+    const [showArchive, setShowArchive] = useState(false)
+    const activeEntries = productEntries.filter(productEntry => productEntry.remainingQuantity > 0)
+    const archivedEntries = productEntries.filter(productEntry => productEntry.remainingQuantity === 0)
 
     if(productEntries.length === 0) return (
             <Card className="w-full p-6">
@@ -33,7 +36,17 @@ export default function PurchaseHistory({productEntries}: PurchaseHistoryProps) 
 
     return (
         <Card className="p-6">
-            <h1 className="text-xl font-bold">Aankoopgeschiedenis</h1>
+            <div className="flex items-center justify-between">
+                <h1 className="text-xl font-bold">Aankoopgeschiedenis</h1>
+                {archivedEntries.length > 0 && (
+                    <button
+                        className="text-sm text-muted-foreground underline hover:text-primary transition"
+                        onClick={() => setShowArchive(!showArchive)}
+                    >
+                        {showArchive ? 'Verberg archief' : 'Bekijk archief'}
+                    </button>
+                )}
+            </div>
             <Table>
                 <TableHeader>
                     <TableRow>
@@ -45,7 +58,7 @@ export default function PurchaseHistory({productEntries}: PurchaseHistoryProps) 
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {productEntries.map(productEntry => (
+                    {activeEntries.map(productEntry => (
                         <TableRow key={productEntry.id}>
                             <TableCell> {productEntry.purchaseDate
                                 ? new Date(productEntry.purchaseDate).toLocaleDateString('nl-BE', {
@@ -88,8 +101,49 @@ export default function PurchaseHistory({productEntries}: PurchaseHistoryProps) 
                         </TableRow>
                     ))}
                 </TableBody>
+
             </Table>
+
+            {/* Archief-sectie met aparte tabel */}
+            {showArchive  && (
+                <div className="mt-10" id="archief">
+                    <h2 className="text-lg font-semibold mb-2">Archief</h2>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Aankoopdatum</TableHead>
+                                <TableHead>Houdbaarheidsdatum</TableHead>
+                                <TableHead>Gekocht</TableHead>
+                                <TableHead>Resterend</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {archivedEntries.map(productEntry => (
+                                <TableRow key={productEntry.id}>
+                                    <TableCell> {productEntry.purchaseDate
+                                        ? new Date(productEntry.purchaseDate).toLocaleDateString('nl-BE', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: 'numeric',
+                                        })
+                                        : '–'}</TableCell>
+                                    <TableCell> {productEntry.expiryDate
+                                        ? new Date(productEntry.expiryDate).toLocaleDateString('nl-BE', {
+                                            day: '2-digit',
+                                            month: '2-digit',
+                                            year: 'numeric',
+                                        })
+                                        : '–'}</TableCell>
+                                    <TableCell>{productEntry.boughtQuantity}</TableCell>
+                                    <TableCell>{productEntry.remainingQuantity}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
+            )}
         </Card>
+
     )
 }
 
