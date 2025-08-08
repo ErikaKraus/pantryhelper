@@ -58,7 +58,7 @@ export default function DetailProduct({product, initialFavourite}: DetailProduct
                         {numberOfItems > 0 ? (
                             <span className="text-xl font-normal text-muted-foreground">
                                 ({numberOfItems}{' '}
-                                {numberOfItems === 1 ? 'stuk' : 'stuks'}
+                                {numberOfItems === 1 ? 'stuk' : 'stuks'})
                             </span>) :(
                             <span className="text-xl font-normal text-destructive">(geen voorraad meer)</span>
                         ) }
