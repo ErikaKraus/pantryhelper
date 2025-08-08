@@ -94,7 +94,7 @@ export async function getShortExpiryProductEntries(groupId: string, daysAhead = 
             },
         },
         orderBy: { expiryDate: 'asc' },
-        distinct: ['productId'],
+        // distinct: ['productId'],
     })
 }
 
