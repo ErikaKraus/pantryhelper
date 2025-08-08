@@ -2,7 +2,7 @@ import DetailProduct from '@/components/custom/products/detailProduct'
 import {getSessionProfileOrRedirect} from '@mediators'
 import {getProductById} from '@dal'
 import PurchaseHistory from '@/components/custom/products/purchaseHistory'
-import AddProductPurchase from '@/components/custom/products/addProductPurchase'
+import AddProductEntry from '@/components/custom/productEntries/addProductEntry'
 
 export default async function ProductPage({params}: { params: { productId: string }})  {
     const { productId } = await params
@@ -24,7 +24,7 @@ export default async function ProductPage({params}: { params: { productId: strin
                 <DetailProduct product={product} initialFavourite={initialFavourite}                />
             </div>
             <div>
-                <AddProductPurchase productId={product.id} />
+                <AddProductEntry productId={product.id} />
 
             </div>
 
