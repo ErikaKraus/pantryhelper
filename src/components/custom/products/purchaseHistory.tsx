@@ -85,14 +85,14 @@ export default function PurchaseHistory({productEntries}: PurchaseHistoryProps) 
                                     –
                                 </Button>
                                 <span>{productEntry.remainingQuantity}</span>
-                                <Button
-                                    variant="outline"
-                                    size="icon"
-                                    onClick={() => handleUpdate(productEntry.id, productEntry.remainingQuantity + 1)}
-                                    disabled={isPending}
-                                >
-                                    +
-                                </Button>
+                                {/*<Button*/}
+                                {/*    variant="outline"*/}
+                                {/*    size="icon"*/}
+                                {/*    onClick={() => handleUpdate(productEntry.id, productEntry.remainingQuantity + 1)}*/}
+                                {/*    disabled={isPending}*/}
+                                {/*>*/}
+                                {/*    +*/}
+                                {/*</Button>*/}
                             </div></TableCell>
                             <TableCell className="flex gap-2">
                                 <EditProductEntryDialog productEntry={productEntry} productId={productEntry.productId} />
