@@ -91,11 +91,11 @@ export default function EditProductDialog ({product, allCategories}: EditProduct
                             <FormError path="brand" formErrors={hookForm.formState.errors} serverErrors={actionResult} />
                         </div>
 
-                        <div>
-                            {/*<Label htmlFor="numberOfItems" className="mb-1">Aantal</Label>*/}
-                            <Input id="numberOfItems" type="hidden" {...hookForm.register('numberOfItems')}  />
-                            <FormError path="numberOfItems" formErrors={hookForm.formState.errors} serverErrors={actionResult} />
-                        </div>
+                        {/*<div>*/}
+                        {/*    /!*<Label htmlFor="numberOfItems" className="mb-1">Aantal</Label>*!/*/}
+                        {/*    <Input id="numberOfItems" type="hidden" {...hookForm.register('numberOfItems')}  />*/}
+                        {/*    <FormError path="numberOfItems" formErrors={hookForm.formState.errors} serverErrors={actionResult} />*/}
+                        {/*</div>*/}
 
                         <div>
                             <Label htmlFor="restockThreshold" className="mb-1">Minimale voorraad</Label>

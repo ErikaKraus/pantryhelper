@@ -18,7 +18,8 @@ export const productSchema = z.object({
     numberOfItems: z.coerce
         .number({invalid_type_error: 'Aantal items moet een getal zijn'})
         .int('Aantal items moet een geheel getal zijn.')
-        .nonnegative('Aantal items moet groter zijn dan nul.'),
+        .nonnegative('Aantal items moet groter zijn dan nul.')
+        .optional(),
     restockThreshold: z.preprocess(
         (val) => (val === '' || val == null ? undefined : val),
         z.coerce
