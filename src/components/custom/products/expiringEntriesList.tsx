@@ -8,6 +8,7 @@ import { updateRemainingQuantity } from '@actions'
 import Link from "next/link";
 import {Eye} from "lucide-react";
 import {useRouter} from "next/navigation";
+import DeleteProductEntryButton from "@/components/custom/productEntries/deleteProductEntryButton";
 
 interface ExpiringEntriesListProps {
     productEntries: Array<
@@ -68,7 +69,10 @@ export default function ExpiringEntriesList({ productEntries }: ExpiringEntriesL
                 </TableHeader>
                 <TableBody>
                     {entries.map(entry => (
-                        <TableRow key={entry.id}>
+                        <TableRow
+                            key={entry.id}
+                            className={entry.expiryDate && new Date(entry.expiryDate) < new Date() ? 'bg-red-100' : ''}
+                        >
                             <TableCell>{entry.product.name}</TableCell>
                             <TableCell>{entry.product.brand}</TableCell>
                             <TableCell>
@@ -101,13 +105,15 @@ export default function ExpiringEntriesList({ productEntries }: ExpiringEntriesL
                                     {/*</Button>*/}
                                 </div>
                             </TableCell>
-                            <TableCell>
+                            <TableCell className="flex gap-2">
                                 <Button
                                     variant="outline"
                                     size="sm"
                                     onClick={() => router.push(`/products/${entry.product.id}`)}>
                                     <Eye size={16} />
                                 </Button>
+                                <DeleteProductEntryButton productEntryId={entry.id} productId={entry.productId} />
+
                             </TableCell>
                         </TableRow>
                     ))}

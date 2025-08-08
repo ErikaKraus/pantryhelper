@@ -92,14 +92,14 @@ export default function EditProductDialog ({product, allCategories}: EditProduct
                         </div>
 
                         <div>
-                            <Label htmlFor="numberOfItems" className="mb-1">Aantal</Label>
-                            <Input id="numberOfItems" {...hookForm.register('numberOfItems')}  />
+                            {/*<Label htmlFor="numberOfItems" className="mb-1">Aantal</Label>*/}
+                            <Input id="numberOfItems" type="hidden" {...hookForm.register('numberOfItems')}  />
                             <FormError path="numberOfItems" formErrors={hookForm.formState.errors} serverErrors={actionResult} />
                         </div>
 
                         <div>
                             <Label htmlFor="restockThreshold" className="mb-1">Minimale voorraad</Label>
-                            <Input id="restockThreshold" {...hookForm.register('restockThreshold')}  />
+                            <Input id="restockThreshold" type="number" {...hookForm.register('restockThreshold')}  />
                             <FormError path="restockThreshold" formErrors={hookForm.formState.errors} serverErrors={actionResult} />
                         </div>
 
@@ -140,7 +140,7 @@ export default function EditProductDialog ({product, allCategories}: EditProduct
 
                         <div>
                             <Label className="mb-1">Inhoud</Label>
-                            <Input id="volumeContent" {...hookForm.register('volumeContent')}  />
+                            <Input id="volumeContent" type="number" {...hookForm.register('volumeContent')}  />
                             <FormError path="volumeContent" formErrors={hookForm.formState.errors} serverErrors={actionResult} />
                         </div>
 
